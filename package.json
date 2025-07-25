@@ -1,0 +1,59 @@
+{
+	"name": "@fal-works/concept-model-diagram",
+	"version": "0.1.0",
+	"description": "Tiny toolkit for concept modeling.",
+	"type": "module",
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"types": "./src/index.ts",
+	"exports": {
+		".": {
+			"default": {
+				"import": "./dist/index.js",
+				"types": "./src/index.ts"
+			}
+		}
+	},
+	"files": [
+		"dist/",
+		"src/"
+	],
+	"scripts": {
+		"build": "tsdown",
+		"test": "node --test src/**/*.test.ts",
+		"lint": "biome check src/",
+		"lint:fix": "biome check --fix src/",
+		"check:types": "tsc --noEmit -p tsconfig.json",
+		"check": "npm run check:types && npm run lint",
+		"fix": "npm run check:types && npm run lint:fix",
+		"prebuild": "rimraf -g dist/*",
+		"prepublishOnly": "npm run check:types && npm run lint && npm run test"
+	},
+	"keywords": [
+		"JFG",
+		"diagram"
+	],
+	"author": "FAL",
+	"license": "Apache-2.0",
+	"engines": {
+		"node": ">=22.0.0"
+	},
+	"dependencies": {
+		"yaml": "^2.8.0"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.1.2",
+		"@types/node": "^24.1.0",
+		"rimraf": "^6.0.1",
+		"tsdown": "^0.13.0",
+		"typescript": "^5.8.3"
+	},
+	"peerDependencies": {
+		"typescript": ">=5.0.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/fal-works/concept-diagram.git"
+	},
+	"homepage": "https://github.com/fal-works/concept-diagram#readme"
+}
