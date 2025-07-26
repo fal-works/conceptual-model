@@ -1,4 +1,3 @@
+# @fal-works/conceptual-model-diagram
 
-# @fal-works/concept-model-diagram
-
-A tiny toolkit for concept modeling.
+A tiny toolkit for conceptual modeling.
