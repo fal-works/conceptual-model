@@ -25,7 +25,9 @@ Use `npm run`, not `pnpm run`.
 	- Minimize implementation comments
 	- Avoid explaining "recent changes"
 - Implementations:
-	- Small modules, small functions
+	- Write small modules with small functions
+	- Prefer functions over classes, stateless over stateful
+	- Design functions with clear, single responsibilities (functional cohesion) before composing them into workflows (sequential cohesion)
 - Unit tests:
 	- Use Node.js built-in testing framework
 	- Each implementation module has a corresponding adjacent test module: `src/mod.ts` → `src/mod.test.ts`
