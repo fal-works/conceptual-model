@@ -1,8 +1,32 @@
 #!/usr/bin/env node
 
 import { type PathLike, readFileSync, writeFileSync } from "node:fs";
+import { basename, dirname, extname, join } from "node:path";
 import { cac } from "cac";
 import { stringify as yamlStringify } from "yaml";
+
+/**
+ * Validates that the input file has the expected extension.
+ * @param filePath - Path to validate
+ * @param expectedExt - Expected file extension (e.g., '.json')
+ */
+function validateFileExtension(filePath: string, expectedExt: string): void {
+	const actualExt = extname(filePath).toLowerCase();
+	if (actualExt !== expectedExt) {
+		throw new Error(`Expected ${expectedExt} file, but got ${actualExt || "no extension"}`);
+	}
+}
+
+/**
+ * Generates output file path by changing extension.
+ * @param inputPath - Input file path
+ * @param newExt - New extension (e.g., '.yaml')
+ */
+function generateOutputPath(inputPath: string, newExt: string): string {
+	const dir = dirname(inputPath);
+	const nameWithoutExt = basename(inputPath, extname(inputPath));
+	return join(dir, nameWithoutExt + newExt);
+}
 
 /**
  * Converts a JSON file to YAML format.
@@ -15,6 +39,9 @@ export function convertJsonFileToYaml(
 	outputFile?: PathLike,
 	modeline?: boolean,
 ): void {
+	const inputPath = inputFile.toString();
+
+	validateFileExtension(inputPath, ".json");
 	const jsonContent = readFileSync(inputFile, "utf-8");
 	const jsonData = JSON.parse(jsonContent);
 
@@ -45,17 +72,20 @@ function main(): void {
 	cli
 		.command("<input>", "Convert JSON file to YAML")
 		.option("-o, --output <file>", "Output file path (optional, defaults to stdout)")
+		.option("-s, --save", "Save to file with same name but .yaml extension (ignored if -o is used)")
 		.option("-m, --modeline", "Add YAML language server modeline comment if $schema exists")
 		.action((input, options) => {
-			try {
-				convertJsonFileToYaml(input, options.output, options.modeline);
-			} catch (error) {
-				console.error("Error:", error instanceof Error ? error.message : String(error));
-				process.exit(1);
+			let outputFile = options.output;
+
+			if (!outputFile && options.save) {
+				outputFile = generateOutputPath(input, ".yaml");
 			}
+
+			convertJsonFileToYaml(input, outputFile, options.modeline);
 		})
 		.example("j2y schema.json")
 		.example("j2y -o schema.yaml schema.json")
+		.example("j2y --save schema.json")
 		.example("j2y --modeline schema.json");
 
 	cli.help();
