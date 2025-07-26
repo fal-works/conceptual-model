@@ -28,7 +28,8 @@
 		"fix": "npm run check:types && npm run lint:fix",
 		"prebuild": "rimraf -g dist/*",
 		"prepublishOnly": "npm run check:types && npm run lint && npm run test",
-		"j2y": "node scripts/j2y.ts"
+		"j2y": "node scripts/j2y.ts",
+		"y2j": "node scripts/y2j.ts"
 	},
 	"keywords": [
 		"JFG",
