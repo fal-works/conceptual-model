@@ -37,17 +37,17 @@ definitions:
             properties:
               direction:
                 type: string
-                description: "Direction of the diagram layout: TB, BT, LR, or RL."
+                description: |-
+                  Direction of the diagram layout:
+                  - TB: Top to bottom layout
+                  - BT: Bottom to top layout
+                  - LR: Left to right layout
+                  - RL: Right to left layout
                 enum:
                   - TB
                   - BT
                   - LR
                   - RL
-                enumDescriptions:
-                  - Top to bottom layout
-                  - Bottom to top layout
-                  - Left to right layout
-                  - Right to left layout
             additionalProperties: false
       nodes:
         type: object
@@ -87,17 +87,17 @@ definitions:
               description: Identifier of the target node/class (must match a key in the nodes object)
             relation:
               type: string
-              description: Type of relationship/association between the nodes/classes.
+              description: |-
+                Type of relationship/association between the nodes/classes:
+                - is-composed-of: Composition (ownership with lifecycle dependency)
+                - aggregates: Aggregation (weak ownership without lifecycle dependency)
+                - links-to: Simple directed association (reference to the target)
+                - is-a: Generalization/inheritance
               enum:
                 - is-composed-of
                 - aggregates
                 - links-to
                 - is-a
-              enumDescriptions:
-                - Composition (ownership with lifecycle dependency)
-                - Aggregation (weak ownership without lifecycle dependency)
-                - Simple directed association (reference to the target)
-                - Generalization/inheritance
             label:
               type: string
               description: Optional label for this association

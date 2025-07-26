@@ -47,14 +47,9 @@ export const schema = {
 							properties: {
 								direction: {
 									type: "string",
-									description: "Direction of the diagram layout: TB, BT, LR, or RL.",
+									description:
+										"Direction of the diagram layout:\n- TB: Top to bottom layout\n- BT: Bottom to top layout\n- LR: Left to right layout\n- RL: Right to left layout",
 									enum: ["TB", "BT", "LR", "RL"],
-									enumDescriptions: [
-										"Top to bottom layout",
-										"Bottom to top layout",
-										"Left to right layout",
-										"Right to left layout",
-									],
 								},
 							},
 							additionalProperties: false,
@@ -116,14 +111,9 @@ export const schema = {
 							},
 							relation: {
 								type: "string",
-								description: "Type of relationship/association between the nodes/classes.",
+								description:
+									"Type of relationship/association between the nodes/classes:\n- is-composed-of: Composition (ownership with lifecycle dependency)\n- aggregates: Aggregation (weak ownership without lifecycle dependency)\n- links-to: Simple directed association (reference to the target)\n- is-a: Generalization/inheritance",
 								enum: ["is-composed-of", "aggregates", "links-to", "is-a"],
-								enumDescriptions: [
-									"Composition (ownership with lifecycle dependency)",
-									"Aggregation (weak ownership without lifecycle dependency)",
-									"Simple directed association (reference to the target)",
-									"Generalization/inheritance",
-								],
 							},
 							label: {
 								type: "string",
