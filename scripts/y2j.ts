@@ -6,14 +6,14 @@ import { cac } from "cac";
 import { parse as yamlParse } from "yaml";
 
 /**
- * Validates that the input file has the expected extension.
+ * Validates that the file has the expected extension(s).
  * @param filePath - Path to validate
- * @param expectedExts - Expected file extensions (e.g., ['.yaml', '.yml'])
+ * @param expectedExts - Expected file extensions (e.g., ['.json'] or ['.yaml', '.yml'])
  */
 function validateFileExtension(filePath: string, expectedExts: string[]): void {
 	const actualExt = extname(filePath).toLowerCase();
 	if (!expectedExts.includes(actualExt)) {
-		const expectedList = expectedExts.join(" or ");
+		const expectedList = expectedExts.length === 1 ? expectedExts[0] : expectedExts.join(" or ");
 		throw new Error(`Expected ${expectedList} file, but got ${actualExt || "no extension"}`);
 	}
 }
@@ -38,6 +38,8 @@ export function convertYamlFileToJson(inputFile: PathLike, outputFile?: PathLike
 	const inputPath = inputFile.toString();
 
 	validateFileExtension(inputPath, [".yaml", ".yml"]);
+	if (outputFile) validateFileExtension(outputFile.toString(), [".json"]);
+
 	const yamlContent = readFileSync(inputFile, "utf-8");
 	const yamlData = yamlParse(yamlContent);
 
@@ -91,4 +93,6 @@ function main(): void {
 	}
 }
 
-main();
+if (import.meta.url === `file://${process.argv[1]}`) {
+	main();
+}
