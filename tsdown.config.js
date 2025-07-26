@@ -11,7 +11,7 @@ const commonConfig = {
 export default defineConfig([
 	{
 		...commonConfig,
-		entry: { "index": "src/index.ts" },
+		entry: { index: "src/index.ts" },
 		outDir: "dist",
 		sourcemap: true,
 		platform: "neutral",
@@ -19,7 +19,7 @@ export default defineConfig([
 	},
 	{
 		...commonConfig,
-		entry: { "bin": "src/bin.ts" },
+		entry: { bin: "src/bin.ts" },
 		outDir: "dist",
 		platform: "node",
 		target: ["node22", "es2022"],

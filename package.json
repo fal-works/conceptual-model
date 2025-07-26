@@ -21,8 +21,8 @@
 	"scripts": {
 		"build": "tsdown",
 		"test": "node --test src/**/*.test.ts",
-		"lint": "biome check src/",
-		"lint:fix": "biome check --fix src/",
+		"lint": "biome check",
+		"lint:fix": "biome check --fix",
 		"check:types": "tsc --noEmit -p tsconfig.json",
 		"check": "npm run check:types && npm run lint",
 		"fix": "npm run check:types && npm run lint:fix",
