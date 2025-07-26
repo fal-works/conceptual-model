@@ -5,165 +5,162 @@
  * Schema object for model type: `class-model`
  */
 export const schema = {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://fal-works.github.io/conceptual-model/schema/v0.1/class-model.json",
-  "title": "@falworks/conceptual-model JSON Schema for conceptual class models",
-  "description": "Schema for defining conceptual class models that can also be represented as UML class diagrams. This schema is a subset of JSON Graph Format v2.0.\nhttps://github.com/fal-works/conceptual-model",
-  "type": "object",
-  "properties": {
-    "graph": {
-      "$ref": "#/definitions/graph",
-      "description": "The main graph structure for the conceptual class model with nodes (classes) and edges (relationships)."
-    }
-  },
-  "additionalProperties": false,
-  "required": [
-    "graph"
-  ],
-  "definitions": {
-    "graph": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "not used by @falworks/conceptual-model"
-        },
-        "label": {
-          "type": "string",
-          "description": "Title or name of the model."
-        },
-        "type": {
-          "type": "string",
-          "description": "not used by @falworks/conceptual-model"
-        },
-        "metadata": {
-          "type": "object",
-          "description": "Additional metadata for the model.",
-          "properties": {
-            "layout": {
-              "type": "object",
-              "description": "Layout preferences for the diagram rendering.",
-              "properties": {
-                "direction": {
-                  "type": "string",
-                  "description": "Direction of the diagram layout: TB, BT, LR, or RL.",
-                  "enum": [
-                    "TB",
-                    "BT",
-                    "LR",
-                    "RL"
-                  ],
-                  "enumDescriptions": [
-                    "Top to bottom layout",
-                    "Bottom to top layout",
-                    "Left to right layout",
-                    "Right to left layout"
-                  ]
-                }
-              },
-              "additionalProperties": false
-            }
-          }
-        },
-        "nodes": {
-          "type": "object",
-          "description": "Collection of nodes representing classes, entities, or concepts in the model. Each key is a unique node identifier.",
-          "additionalProperties": {
-            "type": "object",
-            "description": "A node representing a class, entity, or concept in the conceptual model. Similar to a class in UML class diagrams.",
-            "properties": {
-              "label": {
-                "type": "string",
-                "description": "Display name for this node/class. Can contain \\n for line breaks. If omitted, the node key will be used as display name."
-              },
-              "metadata": {
-                "type": "object",
-                "description": "Additional metadata for this node/class.",
-                "properties": {
-                  "attributes": {
-                    "type": "array",
-                    "description": "List of attributes.",
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            },
-            "additionalProperties": false
-          }
-        },
-        "edges": {
-          "type": "array",
-          "description": "List of edges representing relationships, associations, or connections between nodes/classes in the conceptual model",
-          "items": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "id": {
-                "type": "string",
-                "description": "not used by @falworks/conceptual-model"
-              },
-              "source": {
-                "type": "string",
-                "description": "Identifier of the source node/class (must match a key in the nodes object)"
-              },
-              "target": {
-                "type": "string",
-                "description": "Identifier of the target node/class (must match a key in the nodes object)"
-              },
-              "relation": {
-                "type": "string",
-                "description": "Type of relationship/association between the nodes/classes.",
-                "enum": [
-                  "is-composed-of",
-                  "aggregates",
-                  "links-to",
-                  "is-a"
-                ],
-                "enumDescriptions": [
-                  "Composition (ownership with lifecycle dependency)",
-                  "Aggregation (weak ownership without lifecycle dependency)",
-                  "Simple directed association (reference to the target)",
-                  "Generalization/inheritance"
-                ]
-              },
-              "label": {
-                "type": "string",
-                "description": "Optional label for this association"
-              },
-              "metadata": {
-                "type": "object",
-                "description": "Additional metadata for this relationship/association. Can contain multiplicity constraints and custom properties.",
-                "properties": {
-                  "multiplicity": {
-                    "type": "object",
-                    "description": "Cardinality/multiplicity constraints for the relationship/association.",
-                    "properties": {
-                      "source": {
-                        "type": "string",
-                        "pattern": "^(0|1|\\*|[0-9]+)(\\.\\.(0|1|\\*|[0-9]+))?$",
-                        "description": "Cardinality/multiplicity on source side (e.g. '1', '0..1', '1..*', '0..*')"
-                      },
-                      "target": {
-                        "type": "string",
-                        "pattern": "^(0|1|\\*|[0-9]+)(\\.\\.(0|1|\\*|[0-9]+))?$",
-                        "description": "Cardinality/multiplicity on target side (e.g. '1', '0..1', '1..*', '0..*')"
-                      }
-                    },
-                    "additionalProperties": false
-                  }
-                }
-              }
-            },
-            "required": [
-              "source",
-              "target"
-            ]
-          }
-        }
-      }
-    }
-  }
+	$schema: "http://json-schema.org/draft-07/schema#",
+	$id: "https://fal-works.github.io/conceptual-model/class-model/v0.1/schema.json",
+	title: "@falworks/conceptual-model JSON Schema for conceptual class models",
+	description:
+		"Schema for defining conceptual class models that can also be represented as UML class diagrams. This schema is a subset of JSON Graph Format v2.0.\nhttps://github.com/fal-works/conceptual-model",
+	type: "object",
+	properties: {
+		graph: {
+			$ref: "#/definitions/graph",
+			description:
+				"The main graph structure for the conceptual class model with nodes (classes) and edges (relationships).",
+		},
+	},
+	additionalProperties: false,
+	required: ["graph"],
+	definitions: {
+		graph: {
+			type: "object",
+			additionalProperties: false,
+			properties: {
+				id: {
+					type: "string",
+					description: "not used by @falworks/conceptual-model",
+				},
+				label: {
+					type: "string",
+					description: "Title or name of the model.",
+				},
+				type: {
+					type: "string",
+					description: "not used by @falworks/conceptual-model",
+				},
+				metadata: {
+					type: "object",
+					description: "Additional metadata for the model.",
+					properties: {
+						layout: {
+							type: "object",
+							description: "Layout preferences for the diagram rendering.",
+							properties: {
+								direction: {
+									type: "string",
+									description: "Direction of the diagram layout: TB, BT, LR, or RL.",
+									enum: ["TB", "BT", "LR", "RL"],
+									enumDescriptions: [
+										"Top to bottom layout",
+										"Bottom to top layout",
+										"Left to right layout",
+										"Right to left layout",
+									],
+								},
+							},
+							additionalProperties: false,
+						},
+					},
+				},
+				nodes: {
+					type: "object",
+					description:
+						"Collection of nodes representing classes, entities, or concepts in the model. Each key is a unique node identifier.",
+					additionalProperties: {
+						type: "object",
+						description:
+							"A node representing a class, entity, or concept in the conceptual model. Similar to a class in UML class diagrams.",
+						properties: {
+							label: {
+								type: "string",
+								description:
+									"Display name for this node/class. Can contain \\n for line breaks. If omitted, the node key will be used as display name.",
+							},
+							metadata: {
+								type: "object",
+								description: "Additional metadata for this node/class.",
+								properties: {
+									attributes: {
+										type: "array",
+										description: "List of attributes.",
+										items: {
+											type: "string",
+										},
+									},
+								},
+							},
+						},
+						additionalProperties: false,
+					},
+				},
+				edges: {
+					type: "array",
+					description:
+						"List of edges representing relationships, associations, or connections between nodes/classes in the conceptual model",
+					items: {
+						type: "object",
+						additionalProperties: false,
+						properties: {
+							id: {
+								type: "string",
+								description: "not used by @falworks/conceptual-model",
+							},
+							source: {
+								type: "string",
+								description:
+									"Identifier of the source node/class (must match a key in the nodes object)",
+							},
+							target: {
+								type: "string",
+								description:
+									"Identifier of the target node/class (must match a key in the nodes object)",
+							},
+							relation: {
+								type: "string",
+								description: "Type of relationship/association between the nodes/classes.",
+								enum: ["is-composed-of", "aggregates", "links-to", "is-a"],
+								enumDescriptions: [
+									"Composition (ownership with lifecycle dependency)",
+									"Aggregation (weak ownership without lifecycle dependency)",
+									"Simple directed association (reference to the target)",
+									"Generalization/inheritance",
+								],
+							},
+							label: {
+								type: "string",
+								description: "Optional label for this association",
+							},
+							metadata: {
+								type: "object",
+								description:
+									"Additional metadata for this relationship/association. Can contain multiplicity constraints and custom properties.",
+								properties: {
+									multiplicity: {
+										type: "object",
+										description:
+											"Cardinality/multiplicity constraints for the relationship/association.",
+										properties: {
+											source: {
+												type: "string",
+												pattern: "^(0|1|\\*|[0-9]+)(\\.\\.(0|1|\\*|[0-9]+))?$",
+												description:
+													"Cardinality/multiplicity on source side (e.g. '1', '0..1', '1..*', '0..*')",
+											},
+											target: {
+												type: "string",
+												pattern: "^(0|1|\\*|[0-9]+)(\\.\\.(0|1|\\*|[0-9]+))?$",
+												description:
+													"Cardinality/multiplicity on target side (e.g. '1', '0..1', '1..*', '0..*')",
+											},
+										},
+										additionalProperties: false,
+									},
+								},
+							},
+						},
+						required: ["source", "target"],
+					},
+				},
+			},
+		},
+	},
 } as const;

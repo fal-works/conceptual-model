@@ -20,7 +20,7 @@
 	],
 	"scripts": {
 		"build": "npm run build:schema && npm run build:dist",
-		"build:schema": "node scripts/build-schemas.ts && biome check docs/schema --fix",
+		"build:schema": "node scripts/build-schemas.ts && biome check docs/ src/ --fix",
 		"build:dist": "tsdown",
 		"test": "node --test src/**/*.test.ts",
 		"lint": "biome check",

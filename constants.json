@@ -1,3 +1,5 @@
 {
-	"schemaVersion": "0.1"
+	"schemaVersions": {
+		"class-model": "0.1"
+	}
 }
