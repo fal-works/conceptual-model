@@ -1,7 +1,7 @@
 {
 	"name": "@fal-works/conceptual-model",
 	"version": "0.1.0",
-	"description": "Tiny toolkit for conceptual modeling.",
+	"description": "Tiny toolkit for conceptual modeling: provides JSON schema (subset of JGF v2).",
 	"type": "module",
 	"main": "./dist/index.js",
 	"module": "./dist/index.js",
@@ -19,7 +19,9 @@
 		"src/"
 	],
 	"scripts": {
-		"build": "tsdown",
+		"build": "npm run build:schema && npm run build:dist",
+		"build:schema": "node scripts/update-schema.ts && biome check docs/schema --fix",
+		"build:dist": "tsdown",
 		"test": "node --test src/**/*.test.ts",
 		"lint": "biome check",
 		"lint:fix": "biome check --fix",
