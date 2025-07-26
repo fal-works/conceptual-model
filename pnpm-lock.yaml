@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      cac:
+        specifier: ^6.7.14
+        version: 6.7.14
       yaml:
         specifier: ^2.8.0
         version: 2.8.0
@@ -18,9 +21,6 @@ importers:
       '@types/node':
         specifier: ^24.1.0
         version: 24.1.0
-      cac:
-        specifier: ^6.7.14
-        version: 6.7.14
       rimraf:
         specifier: ^6.0.1
         version: 6.0.1
