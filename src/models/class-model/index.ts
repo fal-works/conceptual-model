@@ -9,16 +9,17 @@ import { schema } from "./schema-object.ts";
 export { schema };
 
 /**
- * TypeScript type representing the complete class model structure.
- * Automatically generated from the JSON schema using json-schema-to-ts.
+ * Represents a specific conceptual class model containing a `Graph`.
+ * 
+ * The type is automatically generated from the JSON schema.
  */
-export type Schema = FromSchema<typeof schema>;
+export type Model = FromSchema<typeof schema>;
 
 /**
  * TypeScript type for the graph portion of a class model.
  * Contains nodes (classes) and edges (relationships).
  */
-export type Graph = Schema["graph"];
+export type Graph = Model["graph"];
 
 /**
  * TypeScript type for a single node (class) in the model.

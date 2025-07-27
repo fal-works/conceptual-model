@@ -20,7 +20,7 @@ interface ConversionSpec<TData> {
 export const conversions = {
 	"class-model-to-mermaid": {
 		schema: classModel.schema,
-		convert: (data: classModel.Schema) => convertToMermaidClassDiagram(data.graph),
+		convert: (data: classModel.Model) => convertToMermaidClassDiagram(data.graph),
 	},
 	// biome-ignore lint/suspicious/noExplicitAny: Type constraint needs flexibility for different model types
 } as const satisfies Record<ConversionType, ConversionSpec<any>>;

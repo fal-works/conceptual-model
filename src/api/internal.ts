@@ -8,6 +8,6 @@ export { parseJson, parseYaml } from "../core/parsers.ts";
 export { transform } from "../core/pipeline.ts";
 export { type ValidationResult, validateData } from "../core/validation.ts";
 export {
-	type Schema as ClassModelSchema,
+	type Model as ClassModelSchema,
 	schema as classModelSchema,
 } from "../models/class-model/index.ts";
