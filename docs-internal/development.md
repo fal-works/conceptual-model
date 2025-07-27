@@ -18,22 +18,31 @@ Use `npm run`, not `pnpm run`.
 
 ## Code Requirements
 
-- Always:
+- Implementations:
 	- Add `.ts` extensions to imports: `import { ... } from "./mod.ts"`
 	- No `any` types or unsafe assertions
-- Comments:
-	- Minimize implementation comments
-	- Avoid explaining "recent changes"
-- Implementations:
-	- Write small modules with small functions
+- Structures:
 	- Prefer functions over classes, stateless over stateful
-	- Design functions with clear, single responsibilities (functional cohesion) before composing them into workflows (sequential cohesion)
+	- Minimize exports per module
+	- Minimize runtime type checks like `string | string[]`
+- Comments:
+	- Minimize implementation comments. Let the code speak for itself
+	- Avoid explaining "recent changes"
 - Unit tests:
 	- Use Node.js built-in testing framework
 	- Each implementation module has a corresponding adjacent test module: `src/mod.ts` → `src/mod.test.ts`
 	- Mirror module structure within test `describe()` blocks
 - Temporary files:
 	- When creating temporary files that are to be removed later, always use `TMP_` prefix.
+
+## Patterns to Follow
+
+- **Sum Types for Finite State Spaces:**
+	- When you have a finite set of valid states, use sum types `type Choice = "a" | "b"`
+	- "Make illegal states unrepresentable" - use types to eliminate invalid states/combinations at compile time
+- **Focus on Cohesion of Each Function:**
+	- First design functions with clear, single responsibilities (functional cohesion)
+	- Then compose them into workflows (sequential cohesion)
 
 ## Refactoring Guidelines
 
