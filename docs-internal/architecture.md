@@ -5,11 +5,11 @@
 This library provides two main capabilities:
 
 1. **JSON Schema Definition** - A subset of JSON Graph Format v2.0 for defining various conceptual models (currently: conceptual class model)
-2. **Diagram Conversion** - Transforms these models into various diagram formats (currently: Mermaid)
+2. **Model-Diagram Transformation** - Transforms models into various diagram formats (currently: Mermaid), available through both programmatic API and command-line interface
 
-## Conversion Data Flow
+## Transformation Data Flow
 
-The conversion process follows a linear transformation pipeline:
+The transformation follows a linear pipeline:
 
 ```
 [JSON/YAML] → (parser) → [JS object] → (validator) → [typed object] → (converter) → [diagram format]
@@ -27,16 +27,17 @@ The codebase separates build-time tooling from runtime library code:
 - Other utilities for development tasks
 
 **Runtime library (`src/`):**
-- `src/core/` - Core building blocks (parsers, pipeline, validation)
-- `src/models/` - Schema definitions for different model types  
-- `src/converters/` - Format converters for different model/output types
-- `src/api/` - Public APIs
+- `src/models/` - Schema definitions for different model types
+- `src/processes/` - Process specifications and implementations
+- `src/core/` - Core building blocks (parsers, pipeline, validation, types)
+- `src/api/` - Public APIs for end users
+- `src/cli/` - Command-line interface implementation
 
 ## Schema Build System
 
-The schema build process generates both TypeScript types and JSON validation schemas from a single YAML source. TypeScript schemas use `as const` assertions because `json-schema-to-ts` requires compile-time schema definitions, not runtime imports.
+The schema build workflow generates both TypeScript types and JSON validation schemas from a single YAML source. TypeScript schemas use `as const` assertions because `json-schema-to-ts` requires compile-time schema definitions, not runtime imports.
 
-**Build sequence dependency:** YAML schemas must be processed before TypeScript compilation since the generated TypeScript files are imported by the main codebase.
+**Build sequence dependency:** YAML schemas must be built before TypeScript compilation since the generated TypeScript files are imported by the main codebase.
 
 **Version management:** Each schema type maintains independent versioning in `constants.json` rather than using library version numbers. This avoids duplicating unchanged schemas when releasing new library versions.
 
