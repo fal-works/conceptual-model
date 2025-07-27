@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
+import type { InputFileFormat, ModelType, OutputTargetType } from "../core/types.ts";
 import { classModel } from "../index.ts";
 import { changeExtension, detectInputFormat, validateFileExtension } from "./file.ts";
-import type { InputFileFormat, ModelType, OutputTargetType } from "./types.ts";
 
 const { jsonToMermaid, yamlToMermaid } = classModel;
 

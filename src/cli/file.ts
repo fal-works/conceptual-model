@@ -1,5 +1,5 @@
 import { basename, dirname, extname, join } from "node:path";
-import type { InputFileFormat } from "./types.ts";
+import type { InputFileFormat } from "../core/types.ts";
 
 /**
  * Validates that the file has the expected extension(s).
