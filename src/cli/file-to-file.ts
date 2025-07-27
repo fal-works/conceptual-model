@@ -14,9 +14,9 @@ export interface ConversionOptions {
 }
 
 /**
- * Generic conversion workflow.
+ * Generic file-to-file conversion workflow.
  */
-export function convertModel(
+export function convertFileToFile(
 	inputFile: string,
 	options: ConversionOptions,
 	conversionType: ConversionType,
@@ -43,11 +43,4 @@ export function convertModel(
 	} else {
 		console.log(diagram);
 	}
-}
-
-/**
- * Converts class model files to Mermaid diagrams.
- */
-export function convertClassModelToMermaid(inputFile: string, options: ConversionOptions): void {
-	convertModel(inputFile, options, "class-model-to-mermaid");
 }

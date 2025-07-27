@@ -1,5 +1,5 @@
 import { cac } from "cac";
-import { convertClassModelToMermaid } from "./actions.ts";
+import { convertFileToFile } from "./file-to-file.ts";
 
 /**
  * Creates and configures the CLI application.
@@ -16,7 +16,7 @@ export function createCLI(): ReturnType<typeof cac> {
 			"Save to file with same name but .mermaid extension (ignored if -o is used)",
 		)
 		.action((input, options) => {
-			convertClassModelToMermaid(input, options);
+			convertFileToFile(input, options, "class-model-to-mermaid");
 		})
 		.example("conceptual-model class-model-to-mermaid model.yaml")
 		.example("conceptual-model class-model-to-mermaid model.json")

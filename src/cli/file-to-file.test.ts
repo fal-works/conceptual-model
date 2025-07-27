@@ -2,9 +2,9 @@ import assert from "node:assert";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { beforeEach, describe, it } from "node:test";
-import { convertClassModelToMermaid, convertModel } from "./actions.ts";
+import { convertFileToFile } from "./file-to-file.ts";
 
-describe("actions", () => {
+describe("file-to-file", () => {
 	let tempDir: string;
 	let testInputFile: string;
 	let testOutputFile: string;
@@ -18,7 +18,7 @@ describe("actions", () => {
 		testCounter++;
 	});
 
-	describe("convertModel", () => {
+	describe("convertFileToFile", () => {
 		it("should convert to stdout", () => {
 			const yamlContent = `
 graph:
@@ -37,7 +37,7 @@ graph:
 
 			try {
 				// Test with actual class-model -> mermaid conversion
-				convertModel(testInputFile, {}, "class-model-to-mermaid");
+				convertFileToFile(testInputFile, {}, "class-model-to-mermaid");
 				assert.ok(output.includes("classDiagram"));
 			} finally {
 				console.log = originalLog;
@@ -61,7 +61,7 @@ graph:
 			};
 
 			try {
-				convertModel(testInputFile, { save: true }, "class-model-to-mermaid");
+				convertFileToFile(testInputFile, { save: true }, "class-model-to-mermaid");
 
 				assert.ok(output.includes("Mermaid diagram written to:"));
 				assert.ok(output.includes("from YAML"));
@@ -70,75 +70,6 @@ graph:
 
 				const content = readFileSync(expectedOutput, "utf-8");
 				assert.ok(content.includes("classDiagram"));
-			} finally {
-				console.log = originalLog;
-			}
-		});
-
-		it("should throw for invalid output extension", () => {
-			writeFileSync(testInputFile, "graph:\n  nodes: {}\n  edges: []");
-
-			assert.throws(
-				() => convertModel(testInputFile, { output: "invalid.txt" }, "class-model-to-mermaid"),
-				/Expected \.mmd or \.mermaid file, but got \.txt/,
-			);
-		});
-	});
-
-	describe("convertClassModelToMermaid", () => {
-		it("should convert YAML to stdout", () => {
-			// Create test YAML file
-			const yamlContent = `
-graph:
-  nodes:
-    Book:
-      label: Book
-  edges: []
-			`.trim();
-			writeFileSync(testInputFile, yamlContent);
-
-			let output = "";
-			const originalLog = console.log;
-			console.log = (msg: string) => {
-				output = msg;
-			};
-
-			try {
-				convertClassModelToMermaid(testInputFile, {});
-				assert.ok(output.includes("classDiagram"));
-				assert.ok(output.includes("class Book"));
-			} finally {
-				console.log = originalLog;
-			}
-		});
-
-		it("should save to file with --save option", () => {
-			const yamlContent = `
-graph:
-  nodes:
-    Library:
-      label: Library
-  edges: []
-			`.trim();
-			writeFileSync(testInputFile, yamlContent);
-
-			let output = "";
-			const originalLog = console.log;
-			console.log = (msg: string) => {
-				output = msg;
-			};
-
-			try {
-				convertClassModelToMermaid(testInputFile, { save: true });
-
-				assert.ok(output.includes("Mermaid diagram written to:"));
-				assert.ok(output.includes("from YAML"));
-				const expectedOutput = join(tempDir, "test-model.mermaid");
-				assert.ok(existsSync(expectedOutput));
-
-				const content = readFileSync(expectedOutput, "utf-8");
-				assert.ok(content.includes("classDiagram"));
-				assert.ok(content.includes("class Library"));
 			} finally {
 				console.log = originalLog;
 			}
@@ -161,7 +92,7 @@ graph:
 			};
 
 			try {
-				convertClassModelToMermaid(testInputFile, { output: testOutputFile });
+				convertFileToFile(testInputFile, { output: testOutputFile }, "class-model-to-mermaid");
 
 				assert.ok(output.includes("Mermaid diagram written to:"));
 				assert.ok(output.includes(testOutputFile));
@@ -179,7 +110,7 @@ graph:
 			writeFileSync(testInputFile, "graph:\n  nodes: {}\n  edges: []");
 
 			assert.throws(
-				() => convertClassModelToMermaid(testInputFile, { output: "invalid.txt" }),
+				() => convertFileToFile(testInputFile, { output: "invalid.txt" }, "class-model-to-mermaid"),
 				/Expected \.mmd or \.mermaid file, but got \.txt/,
 			);
 		});
