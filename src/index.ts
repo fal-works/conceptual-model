@@ -2,7 +2,7 @@ import * as classModel from "./api/class-model.ts";
 import * as internal from "./api/internal.ts";
 
 /**
- * Class model API for converting YAML/JSON to Mermaid diagrams.
+ * Class model API for transforming YAML/JSON to Mermaid diagrams.
  * Main entry point: `classModel.yamlToMermaid(yaml)` or `classModel.jsonToMermaid(json)`.
  */
 export { classModel };

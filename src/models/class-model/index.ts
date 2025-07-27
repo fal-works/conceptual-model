@@ -10,7 +10,7 @@ export { schema };
 
 /**
  * Represents a specific conceptual class model containing a `Graph`.
- * 
+ *
  * The type is automatically generated from the JSON schema.
  */
 export type Model = FromSchema<typeof schema>;

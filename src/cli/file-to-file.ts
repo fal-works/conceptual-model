@@ -1,28 +1,28 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { outputTargets } from "../core/output-targets.ts";
 import { transform } from "../core/pipeline.ts";
-import type { ConversionType } from "../core/types.ts";
-import { conversionToOutputTarget } from "../core/types.ts";
+import type { ProcessType } from "../core/types.ts";
+import { processToOutputTarget } from "../core/types.ts";
 import { changeExtension, detectInputFormat, validateFileExtension } from "./file.ts";
 
 /**
- * Common options interface for conversion commands.
+ * Common options interface for transformation commands.
  */
-export interface ConversionOptions {
+export interface TransformationOptions {
 	output?: string;
 	save?: boolean;
 }
 
 /**
- * Generic file-to-file conversion workflow.
+ * Generic file-to-file transformation workflow.
  */
-export function convertFileToFile(
+export function transformFileToFile(
 	inputFile: string,
-	options: ConversionOptions,
-	conversionType: ConversionType,
+	options: TransformationOptions,
+	processType: ProcessType,
 ): void {
 	const inputFormat = detectInputFormat(inputFile);
-	const outputTarget = conversionToOutputTarget[conversionType];
+	const outputTarget = processToOutputTarget[processType];
 	const outputConfig = outputTargets[outputTarget];
 
 	let outputFile = options.output;
@@ -33,7 +33,7 @@ export function convertFileToFile(
 	}
 
 	const content = readFileSync(inputFile, "utf-8");
-	const diagram = transform(content, inputFormat, conversionType);
+	const diagram = transform(content, inputFormat, processType);
 
 	if (outputFile) {
 		writeFileSync(outputFile, diagram);

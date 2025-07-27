@@ -1,28 +1,28 @@
-import { conversions, type ModelOfConversion } from "../conversions/index.ts";
+import { type ModelOfProcess, processes } from "../processes/index.ts";
 import { parsers } from "./parsers.ts";
-import type { ConversionType, InputFileFormat } from "./types.ts";
+import type { InputFileFormat, ProcessType } from "./types.ts";
 import { formatValidationErrors, validateData } from "./validation.ts";
 
 /**
  * Transforms input string through a pipeline of parsing, validation, and conversion.
  * @param input - The input string to transform
  * @param inputFileFormat - The input file format that determines parser
- * @param conversionType - The conversion type that determines schema and converter
+ * @param processType - The process type that determines schema and converter
  * @returns The transformed output
  * @throws Error if parsing, validation, or conversion fails
  */
 export function transform(
 	input: string,
 	inputFileFormat: InputFileFormat,
-	conversionType: ConversionType,
+	processType: ProcessType,
 ): string {
-	const conversion = conversions[conversionType];
+	const process = processes[processType];
 	const parser = parsers[inputFileFormat];
 
 	const parsedData = parser(input);
 
-	const validationResult = validateData<ModelOfConversion<typeof conversionType>>(
-		conversion.schema,
+	const validationResult = validateData<ModelOfProcess<typeof processType>>(
+		process.schema,
 		parsedData,
 	);
 
@@ -31,5 +31,5 @@ export function transform(
 		throw new Error(`Validation failed: ${errorMessage}`);
 	}
 
-	return conversion.convert(validationResult.data);
+	return process.convert(validationResult.data);
 }

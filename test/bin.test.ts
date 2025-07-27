@@ -14,7 +14,7 @@ describe("CLI Integration Tests", () => {
 			const { stdout } = await execBin("--help");
 
 			assert.ok(stdout.includes("class-model-to-mermaid"));
-			assert.ok(stdout.includes("Convert class model (YAML/JSON) to Mermaid diagram"));
+			assert.ok(stdout.includes("Transform class model (YAML/JSON) to Mermaid diagram"));
 		});
 
 		it("should accept YAML input and output to stdout", async () => {

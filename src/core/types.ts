@@ -1,5 +1,5 @@
 /**
- * Fundamental types for the data conversion process.
+ * Fundamental types for the data transformation process.
  */
 
 /**
@@ -8,9 +8,9 @@
 export type InputFileFormat = "json" | "yaml";
 
 /**
- * Supported conversion types (model-to-output combinations).
+ * Supported process types (model validation and conversion combinations).
  */
-export type ConversionType = "class-model-to-mermaid";
+export type ProcessType = "class-model-to-mermaid";
 
 /**
  * Supported output target types.
@@ -18,8 +18,8 @@ export type ConversionType = "class-model-to-mermaid";
 export type OutputTargetType = "mermaid";
 
 /**
- * Mapping from conversion type to output target type.
+ * Mapping from process type to output target type.
  */
-export const conversionToOutputTarget: Record<ConversionType, OutputTargetType> = {
+export const processToOutputTarget: Record<ProcessType, OutputTargetType> = {
 	"class-model-to-mermaid": "mermaid",
 };
