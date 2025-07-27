@@ -13,5 +13,6 @@ Thumbs.db
 pnpm-debug.log*
 
 # Temporary folders
+/test-out/
 /local/
 /tmp/
