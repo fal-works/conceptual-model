@@ -1,0 +1,14 @@
+graph:
+  nodes:
+    Book:
+      label: Book
+      metadata:
+        attributes:
+          - title
+          - isbn
+    Library:
+      label: Library
+  edges:
+    - source: Library
+      target: Book
+      relation: is-composed-of
