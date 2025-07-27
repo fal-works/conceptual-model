@@ -37,7 +37,7 @@ graph:
 
 			try {
 				// Test with actual class-model -> mermaid conversion
-				convertModel(testInputFile, {}, "class-model", "mermaid");
+				convertModel(testInputFile, {}, "class-model-to-mermaid");
 				assert.ok(output.includes("classDiagram"));
 			} finally {
 				console.log = originalLog;
@@ -61,7 +61,7 @@ graph:
 			};
 
 			try {
-				convertModel(testInputFile, { save: true }, "class-model", "mermaid");
+				convertModel(testInputFile, { save: true }, "class-model-to-mermaid");
 
 				assert.ok(output.includes("Mermaid diagram written to:"));
 				assert.ok(output.includes("from YAML"));
@@ -79,7 +79,7 @@ graph:
 			writeFileSync(testInputFile, "graph:\n  nodes: {}\n  edges: []");
 
 			assert.throws(
-				() => convertModel(testInputFile, { output: "invalid.txt" }, "class-model", "mermaid"),
+				() => convertModel(testInputFile, { output: "invalid.txt" }, "class-model-to-mermaid"),
 				/Expected \.mmd or \.mermaid file, but got \.txt/,
 			);
 		});

@@ -8,11 +8,18 @@
 export type InputFileFormat = "json" | "yaml";
 
 /**
- * Supported conceptual model types.
+ * Supported conversion types (model-to-output combinations).
  */
-export type ModelType = "class-model";
+export type ConversionType = "class-model-to-mermaid";
 
 /**
  * Supported output target types.
  */
 export type OutputTargetType = "mermaid";
+
+/**
+ * Mapping from conversion type to output target type.
+ */
+export const conversionToOutputTarget: Record<ConversionType, OutputTargetType> = {
+	"class-model-to-mermaid": "mermaid",
+};

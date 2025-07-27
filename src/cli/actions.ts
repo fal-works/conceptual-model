@@ -1,9 +1,9 @@
 import { readFileSync, writeFileSync } from "node:fs";
-import type { InputFileFormat, ModelType, OutputTargetType } from "../core/types.ts";
-import { classModel } from "../index.ts";
+import { outputTargets } from "../core/output-targets.ts";
+import { transform } from "../core/pipeline.ts";
+import type { ConversionType } from "../core/types.ts";
+import { conversionToOutputTarget } from "../core/types.ts";
 import { changeExtension, detectInputFormat, validateFileExtension } from "./file.ts";
-
-const { jsonToMermaid, yamlToMermaid } = classModel;
 
 /**
  * Common options interface for conversion commands.
@@ -14,64 +14,16 @@ export interface ConversionOptions {
 }
 
 /**
- * Output target configuration.
- */
-interface OutputConfig {
-	validOutputExtensions: string[];
-	defaultOutputExtension: string;
-	outputFormatName: string;
-}
-
-/**
- * Gets converter function based on input format, model type, and output target.
- */
-function getConverter(
-	inputFormat: InputFileFormat,
-	modelType: ModelType,
-	outputTarget: OutputTargetType,
-): (content: string) => string {
-	// Currently only supports class-model -> mermaid
-	if (modelType === "class-model" && outputTarget === "mermaid") {
-		switch (inputFormat) {
-			case "yaml":
-				return yamlToMermaid;
-			case "json":
-				return jsonToMermaid;
-			default:
-				throw new Error(`Unsupported input format: ${inputFormat}`);
-		}
-	}
-	throw new Error(`Unsupported combination: ${modelType} -> ${outputTarget}`);
-}
-
-/**
- * Gets output configuration for the specified target.
- */
-function getOutputConfig(outputTarget: OutputTargetType): OutputConfig {
-	switch (outputTarget) {
-		case "mermaid":
-			return {
-				validOutputExtensions: [".mmd", ".mermaid"],
-				defaultOutputExtension: ".mermaid",
-				outputFormatName: "Mermaid diagram",
-			};
-		default:
-			throw new Error(`Unsupported output target: ${outputTarget}`);
-	}
-}
-
-/**
- * Generic model conversion workflow.
+ * Generic conversion workflow.
  */
 export function convertModel(
 	inputFile: string,
 	options: ConversionOptions,
-	modelType: ModelType,
-	outputTarget: OutputTargetType,
+	conversionType: ConversionType,
 ): void {
 	const inputFormat = detectInputFormat(inputFile);
-	const converter = getConverter(inputFormat, modelType, outputTarget);
-	const outputConfig = getOutputConfig(outputTarget);
+	const outputTarget = conversionToOutputTarget[conversionType];
+	const outputConfig = outputTargets[outputTarget];
 
 	let outputFile = options.output;
 	if (outputFile) {
@@ -81,7 +33,7 @@ export function convertModel(
 	}
 
 	const content = readFileSync(inputFile, "utf-8");
-	const diagram = converter(content);
+	const diagram = transform(content, inputFormat, conversionType);
 
 	if (outputFile) {
 		writeFileSync(outputFile, diagram);
@@ -97,5 +49,5 @@ export function convertModel(
  * Converts class model files to Mermaid diagrams.
  */
 export function convertClassModelToMermaid(inputFile: string, options: ConversionOptions): void {
-	convertModel(inputFile, options, "class-model", "mermaid");
+	convertModel(inputFile, options, "class-model-to-mermaid");
 }

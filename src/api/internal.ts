@@ -3,7 +3,7 @@
  * Not recommended for typical usage.
  */
 
-export { convertToMermaidClassDiagram } from "../converters/mermaid-class-diagram.ts";
+export { convertToMermaidClassDiagram } from "../conversions/mermaid-class-diagram.ts";
 export { parseJson, parseYaml } from "../core/parsers.ts";
 export { transform } from "../core/pipeline.ts";
 export { type ValidationResult, validateData } from "../core/validation.ts";

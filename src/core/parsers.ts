@@ -1,4 +1,5 @@
 import { parse } from "yaml";
+import type { InputFileFormat } from "./types.ts";
 
 /**
  * Function type for parsing string content into JavaScript objects.
@@ -24,3 +25,11 @@ export function parseJson(content: string): unknown {
 export function parseYaml(content: string): unknown {
 	return parse(content);
 }
+
+/**
+ * Registry mapping input file formats to their parser functions.
+ */
+export const parsers: Record<InputFileFormat, Parser> = {
+	json: parseJson,
+	yaml: parseYaml,
+};
