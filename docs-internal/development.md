@@ -43,6 +43,9 @@ Use `npm run`, not `pnpm run`.
 - **Focus on Cohesion of Each Function:**
 	- First design functions with clear, single responsibilities (functional cohesion)
 	- Then compose them into workflows (sequential cohesion)
+- **Reduce Complexity of Package Dependency Graph:**
+	- Aim for one-way dependencies. Avoid circular references among packages if possible
+	- Suggest reorganizing packages when dependencies become complex
 
 ## Refactoring Guidelines
 
