@@ -28,7 +28,8 @@
 		"lint": "biome check",
 		"lint:fix": "biome check --fix",
 		"check:types": "tsc --noEmit -p tsconfig.json",
-		"check": "npm run check:types && npm run lint",
+		"check:exports": "node scripts/check-unused-exports.ts",
+		"check": "npm run check:types && npm run check:exports && npm run lint",
 		"fix": "npm run check:types && npm run lint:fix",
 		"pretest": "rimraf -g test-out/*",
 		"prebuild": "rimraf -g dist/*",
@@ -53,10 +54,11 @@
 	"devDependencies": {
 		"@biomejs/biome": "^2.1.2",
 		"@types/node": "^24.1.0",
+		"json-schema-to-ts": "^3.1.1",
 		"rimraf": "^6.0.1",
+		"ts-unused-exports": "^11.0.1",
 		"tsdown": "^0.13.0",
-		"typescript": "^5.8.3",
-		"json-schema-to-ts": "^3.1.1"
+		"typescript": "^5.8.3"
 	},
 	"peerDependencies": {
 		"typescript": ">=5.0.0"

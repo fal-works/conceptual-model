@@ -8,7 +8,7 @@ import { changeExtension, detectInputFormat, validateFileExtension } from "./fil
 /**
  * Common options interface for transformation commands.
  */
-export interface TransformationOptions {
+interface TransformationOptions {
 	output?: string;
 	save?: boolean;
 }

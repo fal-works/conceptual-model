@@ -4,7 +4,7 @@ import type { InputFileFormat } from "./types.ts";
 /**
  * Function type for parsing string content into JavaScript objects.
  */
-export type Parser = (content: string) => unknown;
+type Parser = (content: string) => unknown;
 
 /**
  * Parses JSON string into a JavaScript object.
