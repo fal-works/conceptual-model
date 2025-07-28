@@ -68,10 +68,10 @@ export function convertToMermaidClassDiagram(graph: Graph): string {
 		const targetClassName = edge.target.replace(/[()]/g, "_");
 		const arrow = getRelationArrow(edge.relation);
 		const multiplicity = formatMultiplicity(edge.metadata?.multiplicity);
-		const linkText = edge.relation === "links-to" ? " : link" : "";
+		const labelText = edge.label ? ` : ${edge.label}` : "";
 
 		lines.push(
-			`    ${sourceClassName}${multiplicity.source} ${arrow}${multiplicity.target} ${targetClassName}${linkText}`,
+			`    ${sourceClassName}${multiplicity.source} ${arrow}${multiplicity.target} ${targetClassName}${labelText}`,
 		);
 	}
 

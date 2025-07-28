@@ -175,7 +175,7 @@ describe("convertToMermaidClassDiagram", () => {
 			assert.ok(result.includes("Child --|> Parent"));
 		});
 
-		it("should generate link relationship with label", () => {
+		it("should generate link relationship without label when none specified", () => {
 			const graph: Graph = {
 				...createGraphWithEdges(),
 				edges: [
@@ -188,7 +188,25 @@ describe("convertToMermaidClassDiagram", () => {
 			};
 			const result = convertToMermaidClassDiagram(graph);
 
-			assert.ok(result.includes("ClassA --> ClassB : link"));
+			assert.ok(result.includes("ClassA --> ClassB"));
+			assert.ok(!result.includes("ClassA --> ClassB :"));
+		});
+
+		it("should generate link relationship with custom label", () => {
+			const graph: Graph = {
+				...createGraphWithEdges(),
+				edges: [
+					{
+						source: "ClassA",
+						target: "ClassB",
+						relation: "links-to",
+						label: "custom label",
+					},
+				],
+			};
+			const result = convertToMermaidClassDiagram(graph);
+
+			assert.ok(result.includes("ClassA --> ClassB : custom label"));
 		});
 
 		it("should include multiplicity when specified", () => {
