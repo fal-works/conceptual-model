@@ -1,5 +1,5 @@
 import { basename, dirname, extname, join } from "node:path";
-import type { InputFileFormat } from "../core/types.ts";
+import type { internal } from "../index.ts";
 
 /**
  * Validates that the file has the expected extension(s).
@@ -24,7 +24,7 @@ export function changeExtension(path: string, newExt: string): string {
 /**
  * Detects input format from file extension.
  */
-export function detectInputFormat(inputFile: string): InputFileFormat {
+export function detectInputFormat(inputFile: string): internal.InputFileFormat {
 	const ext = extname(inputFile).toLowerCase();
 
 	switch (ext) {

@@ -1,8 +1,5 @@
 import { readFileSync, writeFileSync } from "node:fs";
-import { outputTargets } from "../core/output-targets.ts";
-import { transform } from "../core/pipeline.ts";
-import type { ProcessType } from "../core/types.ts";
-import { processToOutputTarget } from "../core/types.ts";
+import { internal } from "../index.js";
 import { changeExtension, detectInputFormat, validateFileExtension } from "./file.ts";
 
 /**
@@ -19,11 +16,11 @@ interface TransformationOptions {
 export function transformFileToFile(
 	inputFile: string,
 	options: TransformationOptions,
-	processType: ProcessType,
+	processType: internal.ProcessType,
 ): void {
 	const inputFormat = detectInputFormat(inputFile);
-	const outputTarget = processToOutputTarget[processType];
-	const outputConfig = outputTargets[outputTarget];
+	const outputTarget = internal.processToOutputTarget[processType];
+	const outputConfig = internal.outputTargets[outputTarget];
 
 	let outputFile = options.output;
 	if (outputFile) {
@@ -33,7 +30,7 @@ export function transformFileToFile(
 	}
 
 	const content = readFileSync(inputFile, "utf-8");
-	const diagram = transform(content, inputFormat, processType);
+	const diagram = internal.transform(content, inputFormat, processType);
 
 	if (outputFile) {
 		writeFileSync(outputFile, diagram);
