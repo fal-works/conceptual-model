@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from "node:fs";
-import { internal } from "../index.js";
+import { internal } from "../index.ts";
 import { changeExtension, detectInputFormat, validateFileExtension } from "./file.ts";
 
 /**
