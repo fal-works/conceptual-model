@@ -1,6 +1,6 @@
 import assert from "node:assert";
 import { describe, it } from "node:test";
-import { jsonToMermaid, yamlToMermaid } from "./class-model.ts";
+import { classModelJsonToMermaid, classModelYamlToMermaid } from "./class-model.ts";
 
 describe("class-model", () => {
 	describe("yamlToMermaid", () => {
@@ -21,7 +21,7 @@ graph:
       target: Book
       relation: is-composed-of
 `;
-			const result = yamlToMermaid(yaml);
+			const result = classModelYamlToMermaid(yaml);
 
 			assert.ok(result.includes("classDiagram"));
 			assert.ok(result.includes("class Book"));
@@ -32,13 +32,13 @@ graph:
 		it("should throw error for invalid YAML", () => {
 			const invalidYaml = `invalid: [yaml: structure`;
 
-			assert.throws(() => yamlToMermaid(invalidYaml), /Error/);
+			assert.throws(() => classModelYamlToMermaid(invalidYaml), /Error/);
 		});
 
 		it("should throw error for invalid schema", () => {
 			const invalidData = `graph: invalid`;
 
-			assert.throws(() => yamlToMermaid(invalidData), /Validation failed/);
+			assert.throws(() => classModelYamlToMermaid(invalidData), /Validation failed/);
 		});
 	});
 
@@ -67,7 +67,7 @@ graph:
 				},
 			});
 
-			const result = jsonToMermaid(json);
+			const result = classModelJsonToMermaid(json);
 
 			assert.ok(result.includes("classDiagram"));
 			assert.ok(result.includes("class Book"));
@@ -78,13 +78,13 @@ graph:
 		it("should throw error for invalid JSON", () => {
 			const invalidJson = `{"invalid": json structure}`;
 
-			assert.throws(() => jsonToMermaid(invalidJson), /Error/);
+			assert.throws(() => classModelJsonToMermaid(invalidJson), /Error/);
 		});
 
 		it("should throw error for invalid schema", () => {
 			const invalidData = JSON.stringify({ graph: "invalid" });
 
-			assert.throws(() => jsonToMermaid(invalidData), /Validation failed/);
+			assert.throws(() => classModelJsonToMermaid(invalidData), /Validation failed/);
 		});
 	});
 });

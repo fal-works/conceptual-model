@@ -1,6 +1,10 @@
-import type { Edge, Graph, Node } from "../models/class-model/index.ts";
+import type {
+	ClassModelEdge,
+	ClassModelGraph,
+	ClassModelNode,
+} from "../models/class-model/index.ts";
 
-function getRelationArrow(relation?: Edge["relation"]): string {
+function getRelationArrow(relation?: ClassModelEdge["relation"]): string {
 	switch (relation) {
 		case "is-composed-of":
 			return "*--";
@@ -27,7 +31,7 @@ function formatMultiplicity(multiplicity?: { source?: string; target?: string })
 	};
 }
 
-export function convertToMermaidClassDiagram(graph: Graph): string {
+export function convertToMermaidClassDiagram(graph: ClassModelGraph): string {
 	const lines: string[] = [];
 
 	// Start with classDiagram directive
@@ -45,7 +49,7 @@ export function convertToMermaidClassDiagram(graph: Graph): string {
 
 	// Generate classes
 	for (const [nodeName, nodeData] of Object.entries(graph.nodes ?? {})) {
-		const node = nodeData as Node;
+		const node = nodeData as ClassModelNode;
 		const className = nodeName.replace(/[()]/g, "_");
 		const classDeclaration = node.label
 			? `class ${className}["${node.label.replace(/\n|\\n/g, "<br>")}"]`

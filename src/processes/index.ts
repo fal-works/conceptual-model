@@ -1,5 +1,5 @@
 import type { ProcessType } from "../core/types.ts";
-import * as classModel from "../models/class-model/index.ts";
+import { type ClassModel, classModelSchema } from "../models/class-model/index.ts";
 import { convertToMermaidClassDiagram } from "./mermaid-class-diagram.ts";
 
 /**
@@ -19,8 +19,8 @@ interface ProcessSpec<TData> {
  */
 export const processes = {
 	"class-model-to-mermaid": {
-		schema: classModel.schema,
-		convert: (data: classModel.Model) => convertToMermaidClassDiagram(data.graph),
+		schema: classModelSchema,
+		convert: (data: ClassModel) => convertToMermaidClassDiagram(data.graph),
 	},
 	// biome-ignore lint/suspicious/noExplicitAny: Type constraint needs flexibility for different model types
 } as const satisfies Record<ProcessType, ProcessSpec<any>>;

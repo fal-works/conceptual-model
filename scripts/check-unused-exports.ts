@@ -46,7 +46,8 @@ function main() {
 		exitCode = 1;
 		for (const [filePath, exports] of unusedExportEntries)
 			for (const exp of exports) {
-				console.log(`${normalizePath(filePath)}:${exp.location.line}`, "-", exp.exportName);
+				const line = exp.location ? `:${exp.location.line}` : "";
+				console.log(`${normalizePath(filePath)}${line}`, "-", exp.exportName);
 			}
 		console.groupEnd();
 	}

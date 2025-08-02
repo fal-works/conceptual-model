@@ -12,7 +12,7 @@ type Parser = (content: string) => unknown;
  * @returns The parsed object
  * @throws Error if JSON parsing fails
  */
-export function parseJson(content: string): unknown {
+function parseJson(content: string): unknown {
 	return JSON.parse(content);
 }
 
@@ -22,7 +22,7 @@ export function parseJson(content: string): unknown {
  * @returns The parsed object
  * @throws Error if YAML parsing fails
  */
-export function parseYaml(content: string): unknown {
+function parseYaml(content: string): unknown {
 	return parse(content);
 }
 

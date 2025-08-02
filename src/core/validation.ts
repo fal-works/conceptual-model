@@ -1,6 +1,6 @@
 import Ajv, { type ErrorObject, type JSONSchemaType, type ValidateFunction } from "ajv";
 
-export type ValidationResult<T> =
+type ValidationResult<T> =
 	| { valid: true; data: T; errors?: undefined }
 	| { valid: false; data?: undefined; errors: ErrorObject[] };
 

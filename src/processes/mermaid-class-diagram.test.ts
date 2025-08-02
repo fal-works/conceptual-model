@@ -1,16 +1,16 @@
 import assert from "node:assert";
 import { describe, it } from "node:test";
-import type { Graph } from "../models/class-model/index.ts";
+import type { ClassModelGraph } from "../models/class-model/index.ts";
 import { convertToMermaidClassDiagram } from "./mermaid-class-diagram.ts";
 
-function createMinimalGraph(): Graph {
+function createMinimalGraph(): ClassModelGraph {
 	return {
 		nodes: {},
 		edges: [],
 	};
 }
 
-function createGraphWithNodes(): Graph {
+function createGraphWithNodes(): ClassModelGraph {
 	return {
 		nodes: {
 			ClassA: {
@@ -27,7 +27,7 @@ function createGraphWithNodes(): Graph {
 	};
 }
 
-function createGraphWithEdges(): Graph {
+function createGraphWithEdges(): ClassModelGraph {
 	return {
 		nodes: {
 			Parent: { label: "Parent" },
@@ -53,7 +53,7 @@ describe("convertToMermaidClassDiagram", () => {
 		});
 
 		it("should include direction when specified", () => {
-			const graph: Graph = {
+			const graph: ClassModelGraph = {
 				...createMinimalGraph(),
 				metadata: {
 					layout: {
@@ -67,7 +67,7 @@ describe("convertToMermaidClassDiagram", () => {
 		});
 
 		it("should include title when specified", () => {
-			const graph: Graph = {
+			const graph: ClassModelGraph = {
 				...createMinimalGraph(),
 				label: "Test Diagram",
 			};
@@ -95,7 +95,7 @@ describe("convertToMermaidClassDiagram", () => {
 		});
 
 		it("should use node key when label is missing", () => {
-			const graph: Graph = {
+			const graph: ClassModelGraph = {
 				nodes: {
 					SimpleClass: {},
 				},
@@ -107,7 +107,7 @@ describe("convertToMermaidClassDiagram", () => {
 		});
 
 		it("should escape special characters in node names", () => {
-			const graph: Graph = {
+			const graph: ClassModelGraph = {
 				nodes: {
 					"Class(With)Parens": {
 						label: "Test Class",
@@ -121,7 +121,7 @@ describe("convertToMermaidClassDiagram", () => {
 		});
 
 		it("should handle line breaks in labels", () => {
-			const graph: Graph = {
+			const graph: ClassModelGraph = {
 				nodes: {
 					MultiLine: {
 						label: "Multi\nLine",
@@ -144,7 +144,7 @@ describe("convertToMermaidClassDiagram", () => {
 		});
 
 		it("should generate aggregation relationship", () => {
-			const graph: Graph = {
+			const graph: ClassModelGraph = {
 				...createGraphWithEdges(),
 				edges: [
 					{
@@ -160,7 +160,7 @@ describe("convertToMermaidClassDiagram", () => {
 		});
 
 		it("should generate inheritance relationship", () => {
-			const graph: Graph = {
+			const graph: ClassModelGraph = {
 				...createGraphWithEdges(),
 				edges: [
 					{
@@ -176,7 +176,7 @@ describe("convertToMermaidClassDiagram", () => {
 		});
 
 		it("should generate link relationship without label when none specified", () => {
-			const graph: Graph = {
+			const graph: ClassModelGraph = {
 				...createGraphWithEdges(),
 				edges: [
 					{
@@ -193,7 +193,7 @@ describe("convertToMermaidClassDiagram", () => {
 		});
 
 		it("should generate link relationship with custom label", () => {
-			const graph: Graph = {
+			const graph: ClassModelGraph = {
 				...createGraphWithEdges(),
 				edges: [
 					{
@@ -210,7 +210,7 @@ describe("convertToMermaidClassDiagram", () => {
 		});
 
 		it("should include multiplicity when specified", () => {
-			const graph: Graph = {
+			const graph: ClassModelGraph = {
 				...createGraphWithEdges(),
 				edges: [
 					{
@@ -232,7 +232,7 @@ describe("convertToMermaidClassDiagram", () => {
 		});
 
 		it("should handle edge without relation", () => {
-			const graph: Graph = {
+			const graph: ClassModelGraph = {
 				...createGraphWithEdges(),
 				edges: [
 					{
@@ -249,7 +249,7 @@ describe("convertToMermaidClassDiagram", () => {
 
 	describe("complete diagram", () => {
 		it("should generate comprehensive diagram", () => {
-			const graph: Graph = {
+			const graph: ClassModelGraph = {
 				label: "Complete Example",
 				metadata: {
 					layout: {
