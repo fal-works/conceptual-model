@@ -7,7 +7,7 @@
 export const schema = {
 	$schema: "http://json-schema.org/draft-07/schema#",
 	$id: "https://fal-works.github.io/conceptual-model/class-model/v0.1/schema.json",
-	title: "@falworks/conceptual-model JSON Schema for conceptual class models",
+	title: "@fal-works/conceptual-model JSON Schema for conceptual class models",
 	description:
 		"Schema for defining conceptual class models that can also be represented as UML class diagrams. This schema is a subset of JSON Graph Format v2.0.\nhttps://github.com/fal-works/conceptual-model",
 	type: "object",
@@ -27,7 +27,7 @@ export const schema = {
 			properties: {
 				id: {
 					type: "string",
-					description: "not used by @falworks/conceptual-model",
+					description: "not used by @fal-works/conceptual-model",
 				},
 				label: {
 					type: "string",
@@ -35,7 +35,7 @@ export const schema = {
 				},
 				type: {
 					type: "string",
-					description: "not used by @falworks/conceptual-model",
+					description: "not used by @fal-works/conceptual-model",
 				},
 				metadata: {
 					type: "object",
@@ -97,7 +97,7 @@ export const schema = {
 						properties: {
 							id: {
 								type: "string",
-								description: "not used by @falworks/conceptual-model",
+								description: "not used by @fal-works/conceptual-model",
 							},
 							source: {
 								type: "string",

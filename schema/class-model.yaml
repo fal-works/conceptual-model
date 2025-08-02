@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=http://json-schema.org/draft-07/schema#
 $schema: http://json-schema.org/draft-07/schema#
 $id: https://fal-works.github.io/conceptual-model/class-model/v0.1/schema.json
-title: "@falworks/conceptual-model JSON Schema for conceptual class models"
+title: "@fal-works/conceptual-model JSON Schema for conceptual class models"
 description: |-
   Schema for defining conceptual class models that can also be represented as UML class diagrams. This schema is a subset of JSON Graph Format v2.0.
   https://github.com/fal-works/conceptual-model
@@ -20,13 +20,13 @@ definitions:
     properties:
       id:
         type: string
-        description: not used by @falworks/conceptual-model
+        description: not used by @fal-works/conceptual-model
       label:
         type: string
         description: Title or name of the model.
       type:
         type: string
-        description: not used by @falworks/conceptual-model
+        description: not used by @fal-works/conceptual-model
       metadata:
         type: object
         description: Additional metadata for the model.
@@ -78,7 +78,7 @@ definitions:
           properties:
             id:
               type: string
-              description: not used by @falworks/conceptual-model
+              description: not used by @fal-works/conceptual-model
             source:
               type: string
               description: Identifier of the source node/class (must match a key in the nodes object)
