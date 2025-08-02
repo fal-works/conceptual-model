@@ -5,18 +5,16 @@
 	"type": "module",
 	"main": "./dist/index.js",
 	"module": "./dist/index.js",
-	"types": "./src/index.ts",
+	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
-			"default": {
-				"import": "./dist/index.js",
-				"types": "./src/index.ts"
-			}
+			"import": "./dist/index.js",
+			"types": "./dist/index.d.ts"
 		}
 	},
+	"bin": "./dist/bin.js",
 	"files": [
-		"dist/",
-		"src/"
+		"dist/"
 	],
 	"scripts": {
 		"setup": "deps-docs",
@@ -33,7 +31,6 @@
 		"check": "npm run check:types && npm run check:exports && npm run lint",
 		"fix": "npm run check:types && npm run lint:fix",
 		"pretest": "rimraf -g test-out/*",
-		"prebuild": "rimraf -g dist/*",
 		"prepublishOnly": "npm run check:types && npm run lint && npm run test",
 		"j2y": "node scripts/j2y.ts",
 		"y2j": "node scripts/y2j.ts"

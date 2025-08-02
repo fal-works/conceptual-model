@@ -5,7 +5,6 @@ import { defineConfig } from "tsdown";
  */
 const commonConfig = {
 	format: "esm",
-	dts: false,
 };
 
 export default defineConfig([
@@ -14,18 +13,19 @@ export default defineConfig([
 		entry: { index: "src/index.ts" },
 		outDir: "dist",
 		sourcemap: true,
+		dts: true,
 		platform: "neutral",
 		target: ["es2022"],
+		external: ["ajv", "cac", "yaml"],
 	},
 	{
 		...commonConfig,
 		entry: { bin: "src/bin.ts" },
 		outDir: "dist",
+		dts: false,
+		minify: true,
 		platform: "node",
 		target: ["node22", "es2022"],
-		external: ["./index.js"],
-		banner: {
-			js: "#!/usr/bin/env node",
-		},
+		external: ["ajv", "cac", "yaml"],
 	},
 ]);
