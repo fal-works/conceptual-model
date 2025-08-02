@@ -16,3 +16,4 @@ pnpm-debug.log*
 /test-out/
 /local/
 /tmp/
+/docs-deps/
