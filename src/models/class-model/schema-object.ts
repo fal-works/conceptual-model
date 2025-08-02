@@ -9,11 +9,7 @@ export const schema = {
 	$id: "https://fal-works.github.io/conceptual-model/class-model/v0.1/schema.json",
 	title: "@fal-works/conceptual-model JSON Schema for conceptual class models",
 	type: "object",
-	properties: {
-		graph: {
-			$ref: "#/definitions/graph",
-		},
-	},
+	properties: { graph: { $ref: "#/definitions/graph" } },
 	additionalProperties: false,
 	required: ["graph"],
 	definitions: {
@@ -21,26 +17,15 @@ export const schema = {
 			type: "object",
 			additionalProperties: false,
 			properties: {
-				id: {
-					type: "string",
-				},
-				label: {
-					type: "string",
-				},
-				type: {
-					type: "string",
-				},
+				id: { type: "string" },
+				label: { type: "string" },
+				type: { type: "string" },
 				metadata: {
 					type: "object",
 					properties: {
 						layout: {
 							type: "object",
-							properties: {
-								direction: {
-									type: "string",
-									enum: ["TB", "BT", "LR", "RL"],
-								},
-							},
+							properties: { direction: { type: "string", enum: ["TB", "BT", "LR", "RL"] } },
 							additionalProperties: false,
 						},
 					},
@@ -50,19 +35,10 @@ export const schema = {
 					additionalProperties: {
 						type: "object",
 						properties: {
-							label: {
-								type: "string",
-							},
+							label: { type: "string" },
 							metadata: {
 								type: "object",
-								properties: {
-									attributes: {
-										type: "array",
-										items: {
-											type: "string",
-										},
-									},
-								},
+								properties: { attributes: { type: "array", items: { type: "string" } } },
 							},
 						},
 						additionalProperties: false,
@@ -74,22 +50,14 @@ export const schema = {
 						type: "object",
 						additionalProperties: false,
 						properties: {
-							id: {
-								type: "string",
-							},
-							source: {
-								type: "string",
-							},
-							target: {
-								type: "string",
-							},
+							id: { type: "string" },
+							source: { type: "string" },
+							target: { type: "string" },
 							relation: {
 								type: "string",
 								enum: ["is-composed-of", "aggregates", "links-to", "is-a"],
 							},
-							label: {
-								type: "string",
-							},
+							label: { type: "string" },
 							metadata: {
 								type: "object",
 								properties: {

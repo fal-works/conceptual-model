@@ -47,7 +47,7 @@ function generateTypeScriptSchema(schemaObject: unknown, name: ModelTypeName): s
 /**
  * Schema object for model type: \`${name}\`
  */
-export const schema = ${JSON.stringify(simplifiedSchema, null, 2)} as const;
+export const schema = ${JSON.stringify(simplifiedSchema)} as const;
 `.trimStart();
 }
 
