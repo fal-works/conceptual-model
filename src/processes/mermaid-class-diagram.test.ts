@@ -296,7 +296,6 @@ describe("convertToMermaidClassDiagram", () => {
 
 			assert.ok(result.includes('Department o-- "1..*" Employee'));
 		});
-
 	});
 
 	describe("complete diagram", () => {

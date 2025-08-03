@@ -50,6 +50,54 @@ describe("CLI Integration Tests", () => {
 			}
 		});
 
+		it("should process multiple files with glob pattern", async () => {
+			const { stdout } = await execBin(
+				"class-model-to-mermaid",
+				"--save",
+				"test/fixtures/simple-model.{yaml,json}",
+			);
+
+			// Should process each file and create output files
+			assert.ok(stdout.includes("Mermaid diagram written to:"));
+			// Check that mermaid files are created for each input file
+			assert.ok(existsSync("test/fixtures/simple-model.mermaid"));
+		});
+
+		it("should inform user when glob pattern matches no files", async () => {
+			const { stdout } = await execBin("class-model-to-mermaid", "test/fixtures/*.nonexistent");
+
+			// Should output informational message instead of throwing error
+			assert.ok(stdout.includes("No files found matching pattern"));
+			assert.ok(stdout.includes("*.nonexistent"));
+		});
+
+		it("should error when glob pattern used without --output or --save", async () => {
+			try {
+				await execBin("class-model-to-mermaid", "test/fixtures/simple-model.{yaml,json}");
+				assert.fail("Should have thrown an error");
+			} catch (error: any) {
+				assert.ok(
+					error.stderr.includes(
+						"When using glob patterns, you must specify either --output (directory) or --save option",
+					),
+				);
+			}
+		});
+
+		it("should use output directory for glob patterns", async () => {
+			const { stdout } = await execBin(
+				"class-model-to-mermaid",
+				"-o",
+				"test-out/glob-output",
+				"test/fixtures/simple-model.{yaml,json}",
+			);
+
+			// Should process each file and create output files in the directory
+			assert.ok(stdout.includes("Mermaid diagram written to:"));
+			// Check that mermaid files are created in the output directory
+			assert.ok(existsSync("test-out/glob-output/simple-model.mermaid"));
+		});
+
 		describe("with custom output files", () => {
 			let tempDir: string;
 			let testCounter = 1;
