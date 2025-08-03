@@ -21,7 +21,6 @@ export const schema = {
 		layout: { $ref: "#/definitions/layout" },
 	},
 	additionalProperties: true,
-	required: ["nodes"],
 	definitions: {
 		node: {
 			title: "Model node",

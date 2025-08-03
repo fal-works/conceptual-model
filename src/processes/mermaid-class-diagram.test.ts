@@ -4,9 +4,7 @@ import type { ClassModel } from "../models/class-model/index.ts";
 import { convertToMermaidClassDiagram } from "./mermaid-class-diagram.ts";
 
 function createMinimalModel(): ClassModel {
-	return {
-		nodes: {},
-	};
+	return {};
 }
 
 function createModelWithNodes(): ClassModel {
@@ -127,6 +125,22 @@ describe("convertToMermaidClassDiagram", () => {
 	});
 
 	describe("edges", () => {
+		it("should generate edge-only model", () => {
+			const model: ClassModel = {
+				edges: [
+					{
+						source: "Library",
+						target: "Book",
+						relation: "is-composed-of",
+					},
+				],
+			};
+			const result = convertToMermaidClassDiagram(model);
+
+			assert.ok(result.includes("Library *-- Book"));
+			assert.strictEqual(result, "classDiagram\n    Library *-- Book");
+		});
+
 		it("should generate composition relationship", () => {
 			const model = createModelWithEdges();
 			const result = convertToMermaidClassDiagram(model);

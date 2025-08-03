@@ -34,7 +34,7 @@ edges:
 		});
 
 		it("should throw error for invalid schema", () => {
-			const invalidData = `invalid: data`;
+			const invalidData = `edges: "not an array"`;
 
 			assert.throws(() => classModelYamlToMermaid(invalidData), /Validation failed/);
 		});
@@ -76,7 +76,7 @@ edges:
 		});
 
 		it("should throw error for invalid schema", () => {
-			const invalidData = JSON.stringify({ invalid: "data" });
+			const invalidData = JSON.stringify({ edges: "not an array" });
 
 			assert.throws(() => classModelJsonToMermaid(invalidData), /Validation failed/);
 		});

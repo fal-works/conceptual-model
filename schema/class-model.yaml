@@ -36,8 +36,6 @@ properties:
   layout:
     $ref: "#/definitions/layout"
 additionalProperties: true
-required:
-  - nodes
 definitions:
   node:
     title: Model node
@@ -66,7 +64,7 @@ definitions:
       source:
         title: Source node
         type: string
-        description: Identifier of the source node/class (must match a key in the nodes object).
+        description: Identifier (key) of the source node/class.
       relation:
         $ref: "#/definitions/relation"
       label:
@@ -78,7 +76,7 @@ definitions:
       target:
         title: Target node
         type: string
-        description: Identifier of the target node/class (must match a key in the nodes object).
+        description: Identifier (key) of the target node/class.
     required:
       - source
       - target
