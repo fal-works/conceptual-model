@@ -20,6 +20,7 @@ See [Development Environment](./DEV_ENVIRONMENT.md) for details.
 ## Code Requirements
 
 - Implementations:
+	- Use ESM (`import`/`export`) syntax
 	- Add `.ts` extensions to imports: `import { ... } from "./mod.ts"`
 	- No `any` types or unsafe assertions
 - Structures:
@@ -29,12 +30,14 @@ See [Development Environment](./DEV_ENVIRONMENT.md) for details.
 - Comments:
 	- Minimize implementation comments. Let the code speak for itself
 	- Avoid explaining "recent changes"
-- Unit tests:
-	- Use Node.js built-in testing framework
-	- Each implementation module has a corresponding adjacent test module: `src/mod.ts` → `src/mod.test.ts`
-	- Mirror module structure within test `describe()` blocks
 - Temporary files:
 	- When creating temporary files that are to be removed later, always use `TMP_` prefix.
+
+## Unit Tests
+
+- Use Node.js built-in testing framework
+- Each implementation module has a corresponding adjacent test module: `src/mod.ts` → `src/mod.test.ts`
+- Mirror module structure within test `describe()` blocks
 
 ## Patterns to Follow
 

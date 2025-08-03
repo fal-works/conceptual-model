@@ -5,8 +5,8 @@
 When generating example models, follow these guidelines:
 
 - General
-    - Generate valid YAML against schema `@docs/schema/v0.1/class-model.json`
-    - Begin YAML with modeline: `# yaml-language-server: $schema=../docs/schema/v0.1/class-model.json`
+    - Generate valid YAML against schema `@docs/schema/v0.x/class-model.json`
+    - Begin YAML with modeline: `# yaml-language-server: $schema=../docs/schema/v0.x/class-model.json`
     - Omit properties marked "not used ..." in schema
     - Minimize quotes - quote only to avoid YAML syntax errors
 - Nodes
