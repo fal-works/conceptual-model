@@ -135,5 +135,12 @@ describe("CLI Integration Tests", () => {
 			assert.ok(stdout.includes("conceptual-model"));
 			assert.ok(stdout.includes("Commands:"));
 		});
+
+		it("should show help when no arguments provided", async () => {
+			const { stdout } = await execBin();
+			assert.ok(stdout.includes("conceptual-model"));
+			assert.ok(stdout.includes("Commands:"));
+			assert.ok(stdout.includes("class-model-to-mermaid"));
+		});
 	});
 });

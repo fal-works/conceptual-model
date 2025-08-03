@@ -31,6 +31,11 @@ export function createCLI(): ReturnType<typeof cac> {
 		.example("conceptual-model class-model-to-mermaid --save '**/*.yaml'")
 		.example("conceptual-model class-model-to-mermaid -o output-dir 'models/*.{yaml,json}'");
 
+	// Default command - show help when no subcommand provided
+	cli.command("").action(() => {
+		cli.outputHelp();
+	});
+
 	cli.help();
 	cli.version("0.1.0");
 
