@@ -2,8 +2,9 @@
 
 import { createCLI } from "./cli/setup.ts";
 
+const cli = createCLI();
+
 try {
-	const cli = createCLI();
 	cli.parse();
 } catch (error) {
 	if (error instanceof Error) {
@@ -12,7 +13,6 @@ try {
 		console.error("Error:", String(error));
 	}
 	console.log();
-	const cli = createCLI();
 	cli.outputHelp();
 	process.exit(1);
 }
