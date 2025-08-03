@@ -59,13 +59,13 @@ export function convertToMermaidClassDiagram(model: ClassModel): string {
 
 	// Generate classes
 	for (const [nodeName, nodeData] of Object.entries(model.nodes ?? {})) {
-		const node = nodeData as ClassModelNode;
+		const node = nodeData as ClassModelNode | null;
 		const className = nodeName.replace(/[()]/g, "_");
-		const classDeclaration = node.label
+		const classDeclaration = node?.label
 			? `class ${className}["${node.label.replace(/\n|\\n/g, "<br>")}"]`
 			: `class ${className}`;
 
-		if (node.attributes && node.attributes.length > 0) {
+		if (node?.attributes && node.attributes.length > 0) {
 			lines.push(`    ${classDeclaration} {`);
 			for (const field of node.attributes) {
 				lines.push(`        ${field}`);

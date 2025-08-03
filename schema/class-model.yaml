@@ -41,20 +41,22 @@ required:
 definitions:
   node:
     title: Model node
-    type: object
     description: A single class, entity, or concept in the model.
-    properties:
-      label:
-        title: Node label
-        type: string
-        description: Display name for this node/class. Can contain \n for line breaks. If omitted, the node key will be used as display name.
-      attributes:
-        title: Node attributes
-        type: array
-        description: List of attributes.
-        items:
-          type: string
-    additionalProperties: false
+    oneOf:
+      - type: object
+        properties:
+          label:
+            title: Node label
+            type: string
+            description: Display name for this node/class. Can contain \n for line breaks. If omitted, the node key will be used as display name.
+          attributes:
+            title: Node attributes
+            type: array
+            description: List of attributes.
+            items:
+              type: string
+        additionalProperties: false
+      - type: "null"
   edge:
     title: Model edge
     type: object

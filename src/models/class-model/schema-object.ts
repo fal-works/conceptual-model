@@ -25,12 +25,17 @@ export const schema = {
 	definitions: {
 		node: {
 			title: "Model node",
-			type: "object",
-			properties: {
-				label: { title: "Node label", type: "string" },
-				attributes: { title: "Node attributes", type: "array", items: { type: "string" } },
-			},
-			additionalProperties: false,
+			oneOf: [
+				{
+					type: "object",
+					properties: {
+						label: { title: "Node label", type: "string" },
+						attributes: { title: "Node attributes", type: "array", items: { type: "string" } },
+					},
+					additionalProperties: false,
+				},
+				{ type: "null" },
+			],
 		},
 		edge: {
 			title: "Model edge",
