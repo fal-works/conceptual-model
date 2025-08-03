@@ -4,26 +4,20 @@ import { schema } from "./schema-object.ts";
 export { schema as classModelSchema };
 
 /**
- * Represents a specific conceptual class model containing a `Graph`.
+ * Represents a conceptual class model.
  *
  * The type is automatically generated from the JSON schema.
  */
 export type ClassModel = FromSchema<typeof schema>;
 
 /**
- * TypeScript type for the graph portion of a class model.
- * Contains nodes (classes) and edges (relationships).
- */
-export type ClassModelGraph = ClassModel["graph"];
-
-/**
  * TypeScript type for a single node (class) in the model.
- * Represents a class, entity, or concept with optional metadata and attributes.
+ * Represents a class, entity, or concept with optional attributes.
  */
-export type ClassModelNode = NonNullable<ClassModelGraph["nodes"]>[string];
+export type ClassModelNode = NonNullable<ClassModel["nodes"]>[string];
 
 /**
  * TypeScript type for a single edge (relationship) in the model.
  * Represents connections between classes like composition, inheritance, etc.
  */
-export type ClassModelEdge = NonNullable<ClassModelGraph["edges"]>[number];
+export type ClassModelEdge = NonNullable<ClassModel["edges"]>[number];

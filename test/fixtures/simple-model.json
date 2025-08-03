@@ -1,22 +1,18 @@
 {
-	"graph": {
-		"nodes": {
-			"Book": {
-				"label": "Book",
-				"metadata": {
-					"attributes": ["title", "isbn"]
-				}
-			},
-			"Library": {
-				"label": "Library"
-			}
+	"nodes": {
+		"Book": {
+			"label": "Book",
+			"attributes": ["title", "isbn"]
 		},
-		"edges": [
-			{
-				"source": "Library",
-				"target": "Book",
-				"relation": "is-composed-of"
-			}
-		]
-	}
+		"Library": {
+			"label": "Library"
+		}
+	},
+	"edges": [
+		{
+			"source": "Library",
+			"target": "Book",
+			"relation": "is-composed-of"
+		}
+	]
 }

@@ -1,8 +1,4 @@
-import type {
-	ClassModelEdge,
-	ClassModelGraph,
-	ClassModelNode,
-} from "../models/class-model/index.ts";
+import type { ClassModel, ClassModelEdge, ClassModelNode } from "../models/class-model/index.ts";
 
 function getRelationArrow(relation?: ClassModelEdge["relation"]): string {
 	switch (relation) {
@@ -21,43 +17,57 @@ function getRelationArrow(relation?: ClassModelEdge["relation"]): string {
 	}
 }
 
-function formatMultiplicity(multiplicity?: { source?: string; target?: string }): {
+function formatMultiplicity(multiplicity?: string): {
 	source: string;
 	target: string;
 } {
+	if (!multiplicity) {
+		return { source: "", target: "" };
+	}
+
+	// Check if it contains "->"
+	const arrowMatch = multiplicity.match(/^(.+?)\s*->\s*(.+)$/);
+	if (arrowMatch) {
+		return {
+			source: ` "${arrowMatch[1].trim()}"`,
+			target: ` "${arrowMatch[2].trim()}"`,
+		};
+	}
+
+	// Single multiplicity applies to target side
 	return {
-		source: multiplicity?.source ? ` "${multiplicity.source}"` : "",
-		target: multiplicity?.target ? ` "${multiplicity.target}"` : "",
+		source: "",
+		target: ` "${multiplicity.trim()}"`,
 	};
 }
 
-export function convertToMermaidClassDiagram(graph: ClassModelGraph): string {
+export function convertToMermaidClassDiagram(model: ClassModel): string {
 	const lines: string[] = [];
 
 	// Start with classDiagram directive
 	lines.push("classDiagram");
 
 	// Add direction if available
-	if (graph.metadata?.layout?.direction) {
-		lines.push(`    direction ${graph.metadata.layout.direction}`);
+	if (model.layout?.direction) {
+		lines.push(`    direction ${model.layout.direction}`);
 	}
 
 	// Add title if available
-	if (graph.label) {
-		lines.push(`    title ${graph.label}`);
+	if (model.title) {
+		lines.push(`    title ${model.title}`);
 	}
 
 	// Generate classes
-	for (const [nodeName, nodeData] of Object.entries(graph.nodes ?? {})) {
+	for (const [nodeName, nodeData] of Object.entries(model.nodes ?? {})) {
 		const node = nodeData as ClassModelNode;
 		const className = nodeName.replace(/[()]/g, "_");
 		const classDeclaration = node.label
 			? `class ${className}["${node.label.replace(/\n|\\n/g, "<br>")}"]`
 			: `class ${className}`;
 
-		if (node.metadata?.attributes && node.metadata.attributes.length > 0) {
+		if (node.attributes && node.attributes.length > 0) {
 			lines.push(`    ${classDeclaration} {`);
-			for (const field of node.metadata.attributes) {
+			for (const field of node.attributes) {
 				lines.push(`        ${field}`);
 			}
 			lines.push("    }");
@@ -67,11 +77,11 @@ export function convertToMermaidClassDiagram(graph: ClassModelGraph): string {
 	}
 
 	// Generate relationships
-	for (const edge of graph.edges ?? []) {
+	for (const edge of model.edges ?? []) {
 		const sourceClassName = edge.source.replace(/[()]/g, "_");
 		const targetClassName = edge.target.replace(/[()]/g, "_");
 		const arrow = getRelationArrow(edge.relation);
-		const multiplicity = formatMultiplicity(edge.metadata?.multiplicity);
+		const multiplicity = formatMultiplicity(edge.multiplicity);
 		const labelText = edge.label ? ` : ${edge.label}` : "";
 
 		lines.push(

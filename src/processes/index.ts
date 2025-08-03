@@ -20,7 +20,7 @@ interface ProcessSpec<TData> {
 export const processes = {
 	"class-model-to-mermaid": {
 		schema: classModelSchema,
-		convert: (data: ClassModel) => convertToMermaidClassDiagram(data.graph),
+		convert: (data: ClassModel) => convertToMermaidClassDiagram(data),
 	},
 	// biome-ignore lint/suspicious/noExplicitAny: Type constraint needs flexibility for different model types
 } as const satisfies Record<ProcessType, ProcessSpec<any>>;

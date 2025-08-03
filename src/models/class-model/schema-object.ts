@@ -9,79 +9,46 @@ export const schema = {
 	$id: "https://fal-works.github.io/conceptual-model/class-model/v0.1/schema.json",
 	title: "@fal-works/conceptual-model JSON Schema for conceptual class models",
 	type: "object",
-	properties: { graph: { $ref: "#/definitions/graph" } },
-	additionalProperties: false,
-	required: ["graph"],
+	properties: {
+		$schema: { type: "string" },
+		title: { type: "string" },
+		nodes: { type: "object", additionalProperties: { $ref: "#/definitions/node" } },
+		edges: { type: "array", items: { $ref: "#/definitions/edge" } },
+		layout: { $ref: "#/definitions/layout" },
+	},
+	additionalProperties: true,
+	required: ["nodes"],
 	definitions: {
-		graph: {
+		node: {
+			type: "object",
+			properties: {
+				label: { type: "string" },
+				attributes: { type: "array", items: { type: "string" } },
+			},
+			additionalProperties: false,
+		},
+		edge: {
 			type: "object",
 			additionalProperties: false,
 			properties: {
-				id: { type: "string" },
 				label: { type: "string" },
-				type: { type: "string" },
-				metadata: {
-					type: "object",
-					properties: {
-						layout: {
-							type: "object",
-							properties: { direction: { type: "string", enum: ["TB", "BT", "LR", "RL"] } },
-							additionalProperties: false,
-						},
-					},
-				},
-				nodes: {
-					type: "object",
-					additionalProperties: {
-						type: "object",
-						properties: {
-							label: { type: "string" },
-							metadata: {
-								type: "object",
-								properties: { attributes: { type: "array", items: { type: "string" } } },
-							},
-						},
-						additionalProperties: false,
-					},
-				},
-				edges: {
-					type: "array",
-					items: {
-						type: "object",
-						additionalProperties: false,
-						properties: {
-							id: { type: "string" },
-							source: { type: "string" },
-							target: { type: "string" },
-							relation: {
-								type: "string",
-								enum: ["is-composed-of", "aggregates", "links-to", "is-a"],
-							},
-							label: { type: "string" },
-							metadata: {
-								type: "object",
-								properties: {
-									multiplicity: {
-										type: "object",
-										properties: {
-											source: {
-												type: "string",
-												pattern: "^(0|1|\\*|[0-9]+)(\\.\\.(0|1|\\*|[0-9]+))?$",
-											},
-											target: {
-												type: "string",
-												pattern: "^(0|1|\\*|[0-9]+)(\\.\\.(0|1|\\*|[0-9]+))?$",
-											},
-										},
-										additionalProperties: false,
-									},
-								},
-							},
-						},
-						required: ["source", "target"],
-					},
-				},
+				source: { type: "string" },
+				relation: { $ref: "#/definitions/relation" },
+				multiplicity: { $ref: "#/definitions/multiplicity" },
+				target: { type: "string" },
 			},
+			required: ["source", "target"],
+		},
+		relation: { type: "string", enum: ["is-composed-of", "aggregates", "links-to", "is-a"] },
+		multiplicity: {
+			type: "string",
+			pattern:
+				"^(0|1|\\*|[0-9]+)(\\.\\.(0|1|\\*|[0-9]+))?( *-> *(0|1|\\*|[0-9]+)(\\.\\.(0|1|\\*|[0-9]+))?)?$",
+		},
+		layout: {
+			type: "object",
+			properties: { direction: { type: "string", enum: ["TB", "BT", "LR", "RL"] } },
+			additionalProperties: false,
 		},
 	},
 } as const;

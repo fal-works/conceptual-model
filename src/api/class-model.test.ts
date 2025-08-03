@@ -6,20 +6,18 @@ describe("class-model", () => {
 	describe("yamlToMermaid", () => {
 		it("should convert valid YAML to Mermaid diagram", () => {
 			const yaml = `
-graph:
-  nodes:
-    Book:
-      label: Book
-      metadata:
-        attributes:
-          - title
-          - isbn
-    Library:
-      label: Library
-  edges:
-    - source: Library
-      target: Book
-      relation: is-composed-of
+nodes:
+  Book:
+    label: Book
+    attributes:
+      - title
+      - isbn
+  Library:
+    label: Library
+edges:
+  - source: Library
+    target: Book
+    relation: is-composed-of
 `;
 			const result = classModelYamlToMermaid(yaml);
 
@@ -36,7 +34,7 @@ graph:
 		});
 
 		it("should throw error for invalid schema", () => {
-			const invalidData = `graph: invalid`;
+			const invalidData = `invalid: data`;
 
 			assert.throws(() => classModelYamlToMermaid(invalidData), /Validation failed/);
 		});
@@ -45,26 +43,22 @@ graph:
 	describe("jsonToMermaid", () => {
 		it("should convert valid JSON to Mermaid diagram", () => {
 			const json = JSON.stringify({
-				graph: {
-					nodes: {
-						Book: {
-							label: "Book",
-							metadata: {
-								attributes: ["title", "isbn"],
-							},
-						},
-						Library: {
-							label: "Library",
-						},
+				nodes: {
+					Book: {
+						label: "Book",
+						attributes: ["title", "isbn"],
 					},
-					edges: [
-						{
-							source: "Library",
-							target: "Book",
-							relation: "is-composed-of",
-						},
-					],
+					Library: {
+						label: "Library",
+					},
 				},
+				edges: [
+					{
+						source: "Library",
+						target: "Book",
+						relation: "is-composed-of",
+					},
+				],
 			});
 
 			const result = classModelJsonToMermaid(json);
@@ -82,7 +76,7 @@ graph:
 		});
 
 		it("should throw error for invalid schema", () => {
-			const invalidData = JSON.stringify({ graph: "invalid" });
+			const invalidData = JSON.stringify({ invalid: "data" });
 
 			assert.throws(() => classModelJsonToMermaid(invalidData), /Validation failed/);
 		});

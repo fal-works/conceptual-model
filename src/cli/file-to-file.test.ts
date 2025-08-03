@@ -21,11 +21,9 @@ describe("file-to-file", () => {
 	describe("transformFileToFile", () => {
 		it("should write to stdout", () => {
 			const yamlContent = `
-graph:
-  nodes:
-    Book:
-      label: Book
-  edges: []
+nodes:
+  Book:
+    label: Book
 			`.trim();
 			writeFileSync(testInputFile, yamlContent);
 
@@ -46,11 +44,9 @@ graph:
 
 		it("should save to file with --save option", () => {
 			const yamlContent = `
-graph:
-  nodes:
-    Library:
-      label: Library
-  edges: []
+nodes:
+  Library:
+    label: Library
 			`.trim();
 			writeFileSync(testInputFile, yamlContent);
 
@@ -77,11 +73,9 @@ graph:
 
 		it("should save to custom output file", () => {
 			const yamlContent = `
-graph:
-  nodes:
-    Custom:
-      label: Custom
-  edges: []
+nodes:
+  Custom:
+    label: Custom
 			`.trim();
 			writeFileSync(testInputFile, yamlContent);
 
@@ -107,7 +101,7 @@ graph:
 		});
 
 		it("should throw for invalid output extension", () => {
-			writeFileSync(testInputFile, "graph:\n  nodes: {}\n  edges: []");
+			writeFileSync(testInputFile, "nodes: {}");
 
 			assert.throws(
 				() =>

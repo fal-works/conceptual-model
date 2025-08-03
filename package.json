@@ -1,7 +1,7 @@
 {
 	"name": "@fal-works/conceptual-model",
 	"version": "0.1.0",
-	"description": "Tiny toolkit for conceptual modeling: provides JSON schema (subset of JGF v2) and a converter to generate Mermaid class diagrams.",
+	"description": "Small toolkit for conceptual modeling: JSON schema definition and Mermaid diagram converter.",
 	"type": "module",
 	"main": "./dist/index.js",
 	"module": "./dist/index.js",
@@ -36,8 +36,11 @@
 		"y2j": "node scripts/y2j.ts"
 	},
 	"keywords": [
-		"JFG",
-		"diagram"
+		"conceptual-modeling",
+		"class-diagram",
+		"mermaid",
+		"json-schema",
+		"uml"
 	],
 	"author": "FAL",
 	"license": "Apache-2.0",

@@ -17,7 +17,7 @@ When generating example models, follow these guidelines:
         - `relation`
         - `label` (optional, only if special meaning)
         - `target`
-        - `metadata.multiplicity` (optional)
+        - `multiplicity` (optional)
     - Specify the source multiplicity of an edge only if it is not "1"
     - Use appropriate relations:
         - `is-a`: inheritance (Car is-a Vehicle)

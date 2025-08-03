@@ -1,16 +1,15 @@
 import assert from "node:assert";
 import { describe, it } from "node:test";
-import type { ClassModelGraph } from "../models/class-model/index.ts";
+import type { ClassModel } from "../models/class-model/index.ts";
 import { convertToMermaidClassDiagram } from "./mermaid-class-diagram.ts";
 
-function createMinimalGraph(): ClassModelGraph {
+function createMinimalModel(): ClassModel {
 	return {
 		nodes: {},
-		edges: [],
 	};
 }
 
-function createGraphWithNodes(): ClassModelGraph {
+function createModelWithNodes(): ClassModel {
 	return {
 		nodes: {
 			ClassA: {
@@ -18,16 +17,13 @@ function createGraphWithNodes(): ClassModelGraph {
 			},
 			ClassB: {
 				label: "Class B",
-				metadata: {
-					attributes: ["field1", "field2"],
-				},
+				attributes: ["field1", "field2"],
 			},
 		},
-		edges: [],
 	};
 }
 
-function createGraphWithEdges(): ClassModelGraph {
+function createModelWithEdges(): ClassModel {
 	return {
 		nodes: {
 			Parent: { label: "Parent" },
@@ -46,32 +42,30 @@ function createGraphWithEdges(): ClassModelGraph {
 describe("convertToMermaidClassDiagram", () => {
 	describe("basic structure", () => {
 		it("should generate minimal diagram", () => {
-			const graph = createMinimalGraph();
-			const result = convertToMermaidClassDiagram(graph);
+			const model = createMinimalModel();
+			const result = convertToMermaidClassDiagram(model);
 
 			assert.strictEqual(result, "classDiagram");
 		});
 
 		it("should include direction when specified", () => {
-			const graph: ClassModelGraph = {
-				...createMinimalGraph(),
-				metadata: {
-					layout: {
-						direction: "LR",
-					},
+			const model: ClassModel = {
+				...createMinimalModel(),
+				layout: {
+					direction: "LR",
 				},
 			};
-			const result = convertToMermaidClassDiagram(graph);
+			const result = convertToMermaidClassDiagram(model);
 
 			assert.ok(result.includes("direction LR"));
 		});
 
 		it("should include title when specified", () => {
-			const graph: ClassModelGraph = {
-				...createMinimalGraph(),
-				label: "Test Diagram",
+			const model: ClassModel = {
+				...createMinimalModel(),
+				title: "Test Diagram",
 			};
-			const result = convertToMermaidClassDiagram(graph);
+			const result = convertToMermaidClassDiagram(model);
 
 			assert.ok(result.includes("title Test Diagram"));
 		});
@@ -79,15 +73,15 @@ describe("convertToMermaidClassDiagram", () => {
 
 	describe("nodes", () => {
 		it("should generate class without attributes", () => {
-			const graph = createGraphWithNodes();
-			const result = convertToMermaidClassDiagram(graph);
+			const model = createModelWithNodes();
+			const result = convertToMermaidClassDiagram(model);
 
 			assert.ok(result.includes('class ClassA["Class A"]'));
 		});
 
 		it("should generate class with attributes", () => {
-			const graph = createGraphWithNodes();
-			const result = convertToMermaidClassDiagram(graph);
+			const model = createModelWithNodes();
+			const result = convertToMermaidClassDiagram(model);
 
 			assert.ok(result.includes('class ClassB["Class B"] {'));
 			assert.ok(result.includes("field1"));
@@ -95,41 +89,38 @@ describe("convertToMermaidClassDiagram", () => {
 		});
 
 		it("should use node key when label is missing", () => {
-			const graph: ClassModelGraph = {
+			const model: ClassModel = {
 				nodes: {
 					SimpleClass: {},
 				},
-				edges: [],
 			};
-			const result = convertToMermaidClassDiagram(graph);
+			const result = convertToMermaidClassDiagram(model);
 
 			assert.ok(result.includes("class SimpleClass"));
 		});
 
 		it("should escape special characters in node names", () => {
-			const graph: ClassModelGraph = {
+			const model: ClassModel = {
 				nodes: {
 					"Class(With)Parens": {
 						label: "Test Class",
 					},
 				},
-				edges: [],
 			};
-			const result = convertToMermaidClassDiagram(graph);
+			const result = convertToMermaidClassDiagram(model);
 
 			assert.ok(result.includes("class Class_With_Parens"));
 		});
 
 		it("should handle line breaks in labels", () => {
-			const graph: ClassModelGraph = {
+			const model: ClassModel = {
 				nodes: {
 					MultiLine: {
 						label: "Multi\nLine",
 					},
 				},
-				edges: [],
 			};
-			const result = convertToMermaidClassDiagram(graph);
+			const result = convertToMermaidClassDiagram(model);
 
 			assert.ok(result.includes("Multi<br>Line"));
 		});
@@ -137,15 +128,15 @@ describe("convertToMermaidClassDiagram", () => {
 
 	describe("edges", () => {
 		it("should generate composition relationship", () => {
-			const graph = createGraphWithEdges();
-			const result = convertToMermaidClassDiagram(graph);
+			const model = createModelWithEdges();
+			const result = convertToMermaidClassDiagram(model);
 
 			assert.ok(result.includes("Parent *-- Child"));
 		});
 
 		it("should generate aggregation relationship", () => {
-			const graph: ClassModelGraph = {
-				...createGraphWithEdges(),
+			const model: ClassModel = {
+				...createModelWithEdges(),
 				edges: [
 					{
 						source: "Parent",
@@ -154,14 +145,14 @@ describe("convertToMermaidClassDiagram", () => {
 					},
 				],
 			};
-			const result = convertToMermaidClassDiagram(graph);
+			const result = convertToMermaidClassDiagram(model);
 
 			assert.ok(result.includes("Parent o-- Child"));
 		});
 
 		it("should generate inheritance relationship", () => {
-			const graph: ClassModelGraph = {
-				...createGraphWithEdges(),
+			const model: ClassModel = {
+				...createModelWithEdges(),
 				edges: [
 					{
 						source: "Child",
@@ -170,14 +161,14 @@ describe("convertToMermaidClassDiagram", () => {
 					},
 				],
 			};
-			const result = convertToMermaidClassDiagram(graph);
+			const result = convertToMermaidClassDiagram(model);
 
 			assert.ok(result.includes("Child --|> Parent"));
 		});
 
 		it("should generate link relationship without label when none specified", () => {
-			const graph: ClassModelGraph = {
-				...createGraphWithEdges(),
+			const model: ClassModel = {
+				...createModelWithEdges(),
 				edges: [
 					{
 						source: "ClassA",
@@ -186,15 +177,15 @@ describe("convertToMermaidClassDiagram", () => {
 					},
 				],
 			};
-			const result = convertToMermaidClassDiagram(graph);
+			const result = convertToMermaidClassDiagram(model);
 
 			assert.ok(result.includes("ClassA --> ClassB"));
 			assert.ok(!result.includes("ClassA --> ClassB :"));
 		});
 
 		it("should generate link relationship with custom label", () => {
-			const graph: ClassModelGraph = {
-				...createGraphWithEdges(),
+			const model: ClassModel = {
+				...createModelWithEdges(),
 				edges: [
 					{
 						source: "ClassA",
@@ -204,36 +195,31 @@ describe("convertToMermaidClassDiagram", () => {
 					},
 				],
 			};
-			const result = convertToMermaidClassDiagram(graph);
+			const result = convertToMermaidClassDiagram(model);
 
 			assert.ok(result.includes("ClassA --> ClassB : custom label"));
 		});
 
 		it("should include multiplicity when specified", () => {
-			const graph: ClassModelGraph = {
-				...createGraphWithEdges(),
+			const model: ClassModel = {
+				...createModelWithEdges(),
 				edges: [
 					{
 						source: "Parent",
 						target: "Child",
 						relation: "is-composed-of",
-						metadata: {
-							multiplicity: {
-								source: "1",
-								target: "0..*",
-							},
-						},
+						multiplicity: "1 -> 0..*",
 					},
 				],
 			};
-			const result = convertToMermaidClassDiagram(graph);
+			const result = convertToMermaidClassDiagram(model);
 
 			assert.ok(result.includes('Parent "1" *-- "0..*" Child'));
 		});
 
 		it("should handle edge without relation", () => {
-			const graph: ClassModelGraph = {
-				...createGraphWithEdges(),
+			const model: ClassModel = {
+				...createModelWithEdges(),
 				edges: [
 					{
 						source: "ClassA",
@@ -241,7 +227,7 @@ describe("convertToMermaidClassDiagram", () => {
 					},
 				],
 			};
-			const result = convertToMermaidClassDiagram(graph);
+			const result = convertToMermaidClassDiagram(model);
 
 			assert.ok(result.includes("ClassA -- ClassB"));
 		});
@@ -249,20 +235,16 @@ describe("convertToMermaidClassDiagram", () => {
 
 	describe("complete diagram", () => {
 		it("should generate comprehensive diagram", () => {
-			const graph: ClassModelGraph = {
-				label: "Complete Example",
-				metadata: {
-					layout: {
-						direction: "TB",
-					},
+			const model: ClassModel = {
+				title: "Complete Example",
+				layout: {
+					direction: "TB",
 				},
 				nodes: {
 					Library: { label: "Library" },
 					Book: {
 						label: "Book",
-						metadata: {
-							attributes: ["isbn", "title"],
-						},
+						attributes: ["isbn", "title"],
 					},
 				},
 				edges: [
@@ -270,16 +252,12 @@ describe("convertToMermaidClassDiagram", () => {
 						source: "Library",
 						target: "Book",
 						relation: "is-composed-of",
-						metadata: {
-							multiplicity: {
-								target: "0..*",
-							},
-						},
+						multiplicity: "0..*",
 					},
 				],
 			};
 
-			const result = convertToMermaidClassDiagram(graph);
+			const result = convertToMermaidClassDiagram(model);
 
 			assert.ok(result.includes("classDiagram"));
 			assert.ok(result.includes("direction TB"));

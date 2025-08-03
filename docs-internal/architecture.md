@@ -4,7 +4,7 @@
 
 This library provides two main capabilities:
 
-1. **JSON Schema Definition** - A subset of JSON Graph Format v2.0 for defining various conceptual models (currently: conceptual class model)
+1. **JSON Schema Definition** - A custom JSON schema for defining various conceptual models (currently: conceptual class model)
 2. **Model-Diagram Transformation** - Transforms models into various diagram formats (currently: Mermaid), available through both programmatic API and command-line interface
 
 ## Transformation Data Flow
