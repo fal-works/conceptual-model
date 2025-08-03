@@ -53,7 +53,7 @@ export const schema = {
 		relation: {
 			title: "Relationship type",
 			type: "string",
-			enum: ["is-composed-of", "aggregates", "links-to", "is-a"],
+			enum: ["is-a", "is-composed-of", "aggregates", "refers-to", "to", "with"],
 		},
 		multiplicity: {
 			title: "Multiplicity",

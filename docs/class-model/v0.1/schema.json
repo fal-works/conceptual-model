@@ -104,8 +104,8 @@
 		"relation": {
 			"title": "Relationship type",
 			"type": "string",
-			"description": "Type of relationship/association between the nodes/classes:\n- is-composed-of: Composition (ownership with lifecycle dependency)\n- aggregates: Aggregation (weak ownership without lifecycle dependency)\n- links-to: Simple directed association (reference to the target)\n- is-a: Generalization/inheritance",
-			"enum": ["is-composed-of", "aggregates", "links-to", "is-a"]
+			"description": "Type of relationship/association between the nodes/classes:\n- is-a: Generalization/inheritance\n- is-composed-of: Composition (ownership with lifecycle dependency)\n- aggregates: Aggregation (weak ownership without lifecycle dependency)\n- refers-to: Reference, or navigable association (can reach the target node but does not own it)\n- to: General directional association (use when other types are not appropriate)\n- with: General bidirectional/nondirectional association (use when other types are not appropriate)",
+			"enum": ["is-a", "is-composed-of", "aggregates", "refers-to", "to", "with"]
 		},
 		"multiplicity": {
 			"title": "Multiplicity",

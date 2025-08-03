@@ -2,18 +2,20 @@ import type { ClassModel, ClassModelEdge, ClassModelNode } from "../models/class
 
 function getRelationArrow(relation?: ClassModelEdge["relation"]): string {
 	switch (relation) {
+		case "is-a":
+			return "--|>";
 		case "is-composed-of":
 			return "*--";
 		case "aggregates":
 			return "o--";
-		case "links-to":
+		case "refers-to":
 			return "-->";
-		case "is-a":
-			return "--|>";
-		case undefined:
+		case "to":
+			return "-->";
+		case "with":
 			return "--";
 		default:
-			return "-->";
+			return "--";
 	}
 }
 

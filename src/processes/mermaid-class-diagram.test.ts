@@ -166,31 +166,77 @@ describe("convertToMermaidClassDiagram", () => {
 			assert.ok(result.includes("Child --|> Parent"));
 		});
 
-		it("should generate link relationship without label when none specified", () => {
+		it("should generate refers-to relationship", () => {
 			const model: ClassModel = {
 				...createModelWithEdges(),
 				edges: [
 					{
 						source: "ClassA",
 						target: "ClassB",
-						relation: "links-to",
+						relation: "refers-to",
 					},
 				],
 			};
 			const result = convertToMermaidClassDiagram(model);
 
 			assert.ok(result.includes("ClassA --> ClassB"));
-			assert.ok(!result.includes("ClassA --> ClassB :"));
 		});
 
-		it("should generate link relationship with custom label", () => {
+		it("should generate to relationship", () => {
 			const model: ClassModel = {
 				...createModelWithEdges(),
 				edges: [
 					{
 						source: "ClassA",
 						target: "ClassB",
-						relation: "links-to",
+						relation: "to",
+					},
+				],
+			};
+			const result = convertToMermaidClassDiagram(model);
+
+			assert.ok(result.includes("ClassA --> ClassB"));
+		});
+
+		it("should generate with relationship", () => {
+			const model: ClassModel = {
+				...createModelWithEdges(),
+				edges: [
+					{
+						source: "ClassA",
+						target: "ClassB",
+						relation: "with",
+					},
+				],
+			};
+			const result = convertToMermaidClassDiagram(model);
+
+			assert.ok(result.includes("ClassA -- ClassB"));
+		});
+
+		it("should handle edge without relation (defaults to undirected)", () => {
+			const model: ClassModel = {
+				...createModelWithEdges(),
+				edges: [
+					{
+						source: "ClassA",
+						target: "ClassB",
+					},
+				],
+			};
+			const result = convertToMermaidClassDiagram(model);
+
+			assert.ok(result.includes("ClassA -- ClassB"));
+		});
+
+		it("should include edge labels", () => {
+			const model: ClassModel = {
+				...createModelWithEdges(),
+				edges: [
+					{
+						source: "ClassA",
+						target: "ClassB",
+						relation: "refers-to",
 						label: "custom label",
 					},
 				],
@@ -200,7 +246,24 @@ describe("convertToMermaidClassDiagram", () => {
 			assert.ok(result.includes("ClassA --> ClassB : custom label"));
 		});
 
-		it("should include multiplicity when specified", () => {
+		it("should omit edge labels when not specified", () => {
+			const model: ClassModel = {
+				...createModelWithEdges(),
+				edges: [
+					{
+						source: "ClassA",
+						target: "ClassB",
+						relation: "aggregates",
+					},
+				],
+			};
+			const result = convertToMermaidClassDiagram(model);
+
+			assert.ok(result.includes("ClassA o-- ClassB"));
+			assert.ok(!result.includes(":"));
+		});
+
+		it("should include bidirectional multiplicity when specified", () => {
 			const model: ClassModel = {
 				...createModelWithEdges(),
 				edges: [
@@ -217,20 +280,23 @@ describe("convertToMermaidClassDiagram", () => {
 			assert.ok(result.includes('Parent "1" *-- "0..*" Child'));
 		});
 
-		it("should handle edge without relation", () => {
+		it("should include target-only multiplicity when specified", () => {
 			const model: ClassModel = {
 				...createModelWithEdges(),
 				edges: [
 					{
-						source: "ClassA",
-						target: "ClassB",
+						source: "Department",
+						target: "Employee",
+						relation: "aggregates",
+						multiplicity: "1..*",
 					},
 				],
 			};
 			const result = convertToMermaidClassDiagram(model);
 
-			assert.ok(result.includes("ClassA -- ClassB"));
+			assert.ok(result.includes('Department o-- "1..*" Employee'));
 		});
+
 	});
 
 	describe("complete diagram", () => {

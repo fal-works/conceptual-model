@@ -87,15 +87,19 @@ definitions:
     type: string
     description: |-
       Type of relationship/association between the nodes/classes:
+      - is-a: Generalization/inheritance
       - is-composed-of: Composition (ownership with lifecycle dependency)
       - aggregates: Aggregation (weak ownership without lifecycle dependency)
-      - links-to: Simple directed association (reference to the target)
-      - is-a: Generalization/inheritance
+      - refers-to: Reference, or navigable association (can reach the target node but does not own it)
+      - to: General directional association (use when other types are not appropriate)
+      - with: General bidirectional/nondirectional association (use when other types are not appropriate)
     enum:
+      - is-a
       - is-composed-of
       - aggregates
-      - links-to
-      - is-a
+      - refers-to
+      - to
+      - with
   multiplicity:
     title: Multiplicity
     type: string
