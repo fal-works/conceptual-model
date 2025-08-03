@@ -7,47 +7,61 @@
 export const schema = {
 	$schema: "http://json-schema.org/draft-07/schema#",
 	$id: "https://fal-works.github.io/conceptual-model/class-model/v0.1/schema.json",
-	title: "@fal-works/conceptual-model JSON Schema for conceptual class models",
+	title: "@fal-works/conceptual-model | Conceptual class model schema",
 	type: "object",
 	properties: {
-		$schema: { type: "string" },
-		title: { type: "string" },
-		nodes: { type: "object", additionalProperties: { $ref: "#/definitions/node" } },
-		edges: { type: "array", items: { $ref: "#/definitions/edge" } },
+		$schema: { title: "JSON schema URL", type: "string" },
+		title: { title: "Model title", type: "string" },
+		nodes: {
+			title: "Model nodes",
+			type: "object",
+			additionalProperties: { $ref: "#/definitions/node" },
+		},
+		edges: { title: "Model edges", type: "array", items: { $ref: "#/definitions/edge" } },
 		layout: { $ref: "#/definitions/layout" },
 	},
 	additionalProperties: true,
 	required: ["nodes"],
 	definitions: {
 		node: {
+			title: "Model node",
 			type: "object",
 			properties: {
-				label: { type: "string" },
-				attributes: { type: "array", items: { type: "string" } },
+				label: { title: "Node label", type: "string" },
+				attributes: { title: "Node attributes", type: "array", items: { type: "string" } },
 			},
 			additionalProperties: false,
 		},
 		edge: {
+			title: "Model edge",
 			type: "object",
 			additionalProperties: false,
 			properties: {
-				label: { type: "string" },
-				source: { type: "string" },
+				source: { title: "Source node", type: "string" },
 				relation: { $ref: "#/definitions/relation" },
+				label: { title: "Edge label", type: "string" },
 				multiplicity: { $ref: "#/definitions/multiplicity" },
-				target: { type: "string" },
+				target: { title: "Target node", type: "string" },
 			},
 			required: ["source", "target"],
 		},
-		relation: { type: "string", enum: ["is-composed-of", "aggregates", "links-to", "is-a"] },
+		relation: {
+			title: "Relationship type",
+			type: "string",
+			enum: ["is-composed-of", "aggregates", "links-to", "is-a"],
+		},
 		multiplicity: {
+			title: "Multiplicity",
 			type: "string",
 			pattern:
 				"^(0|1|\\*|[0-9]+)(\\.\\.(0|1|\\*|[0-9]+))?( *-> *(0|1|\\*|[0-9]+)(\\.\\.(0|1|\\*|[0-9]+))?)?$",
 		},
 		layout: {
+			title: "Layout Preferences",
 			type: "object",
-			properties: { direction: { type: "string", enum: ["TB", "BT", "LR", "RL"] } },
+			properties: {
+				direction: { title: "Layout direction", type: "string", enum: ["TB", "BT", "LR", "RL"] },
+			},
 			additionalProperties: false,
 		},
 	},
