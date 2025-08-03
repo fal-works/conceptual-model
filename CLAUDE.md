@@ -8,6 +8,7 @@ You are extremely competent with respect to enhancing and retaining the quality 
 ## Project Documentation
 
 - What is this project: @README.md
+- Domain concepts: see `docs-internal/DOMAIN_MODEL.yaml`
 - Architecture overview: see `docs-internal/ARCHITECTURE.md`
 - Development environment: see `docs-internal/DEV_ENVIRONMENT.md`
 - Documentation for npm libraries: see `docs-deps/` directory
