@@ -1,4 +1,4 @@
-import { transform } from "../core/pipeline.ts";
+import { runStringPipeline } from "../core/string-pipeline.ts";
 
 /**
  * Transforms YAML string containing class model data to a Mermaid class diagram string.
@@ -7,7 +7,7 @@ import { transform } from "../core/pipeline.ts";
  * @throws Error if YAML parsing fails or data is invalid
  */
 export function classModelYamlToMermaid(yamlString: string): string {
-	return transform(yamlString, "yaml", "class-model-to-mermaid");
+	return runStringPipeline(yamlString, "yaml", "class-model-to-mermaid");
 }
 
 /**
@@ -17,5 +17,5 @@ export function classModelYamlToMermaid(yamlString: string): string {
  * @throws Error if JSON parsing fails or data is invalid
  */
 export function classModelJsonToMermaid(jsonString: string): string {
-	return transform(jsonString, "json", "class-model-to-mermaid");
+	return runStringPipeline(jsonString, "json", "class-model-to-mermaid");
 }

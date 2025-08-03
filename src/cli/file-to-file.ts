@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from "node:fs";
-import { type ProcessType, processToOutputTarget, transform } from "../api/internal.ts";
+import { type ProcessType, processToOutputTarget, runStringPipeline } from "../api/internal.ts";
 import { outputTargets } from "../core/output-targets.ts";
 import { changeExtension, detectInputFormat, validateFileExtension } from "./file.ts";
 
@@ -31,7 +31,7 @@ export function transformFileToFile(
 	}
 
 	const content = readFileSync(inputFile, "utf-8");
-	const diagram = transform(content, inputFormat, processType);
+	const diagram = runStringPipeline(content, inputFormat, processType);
 
 	if (outputFile) {
 		writeFileSync(outputFile, diagram);

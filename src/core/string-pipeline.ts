@@ -4,14 +4,16 @@ import type { InputFileFormat, ProcessType } from "./types.ts";
 import { formatValidationErrors, validateData } from "./validation.ts";
 
 /**
- * Transforms input string through a pipeline of parsing, validation, and conversion.
+ * Transforms input string through a pipeline of parsing, validation, and conversion
+ * into the desired output string format.
+ *
  * @param input - The input string to transform
  * @param inputFileFormat - The input file format that determines parser
  * @param processType - The process type that determines schema and converter
  * @returns The transformed output
- * @throws Error if parsing, validation, or conversion fails
+ * @throws Error if transformation fails
  */
-export function transform(
+export function runStringPipeline(
 	input: string,
 	inputFileFormat: InputFileFormat,
 	processType: ProcessType,

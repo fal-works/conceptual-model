@@ -2,7 +2,7 @@
  * @description Exports for CLI modules.
  */
 
-export { transform } from "../core/pipeline.ts";
+export { runStringPipeline } from "../core/string-pipeline.ts";
 export {
 	type InputFileFormat,
 	type ProcessType,
