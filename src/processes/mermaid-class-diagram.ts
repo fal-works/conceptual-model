@@ -31,15 +31,15 @@ function formatMultiplicity(multiplicity?: string): {
 	const arrowMatch = multiplicity.match(/^(.+?)\s*->\s*(.+)$/);
 	if (arrowMatch) {
 		return {
-			source: ` "${arrowMatch[1].trim()}"`,
-			target: ` "${arrowMatch[2].trim()}"`,
+			source: arrowMatch[1].trim(),
+			target: arrowMatch[2].trim(),
 		};
 	}
 
 	// Single multiplicity applies to target side
 	return {
 		source: "",
-		target: ` "${multiplicity.trim()}"`,
+		target: multiplicity.trim(),
 	};
 }
 
@@ -84,11 +84,15 @@ export function convertToMermaidClassDiagram(model: ClassModel): string {
 		const targetClassName = edge.target.replace(/[()]/g, "_");
 		const arrow = getRelationArrow(edge.relation);
 		const multiplicity = formatMultiplicity(edge.multiplicity);
-		const labelText = edge.label ? ` : ${edge.label}` : "";
 
-		lines.push(
-			`    ${sourceClassName}${multiplicity.source} ${arrow}${multiplicity.target} ${targetClassName}${labelText}`,
-		);
+		const parts = [sourceClassName];
+		if (multiplicity.source) parts.push(`"${multiplicity.source}"`);
+		parts.push(arrow);
+		if (multiplicity.target) parts.push(`"${multiplicity.target}"`);
+		parts.push(targetClassName);
+		if (edge.label) parts.push(":", edge.label);
+
+		lines.push(`    ${parts.join(" ")}`);
 	}
 
 	return lines.join("\n");
