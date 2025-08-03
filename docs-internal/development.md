@@ -3,6 +3,7 @@
 ## Commands
 
 Use `npm run`, not `pnpm run`.
+See [Development Environment](./DEV_ENVIRONMENT.md) for details.
 
 - `npm run check` - Check code quality (types, linting, and format)
 - `npm run fix` - Check code quality and fix if possible
