@@ -1,6 +1,8 @@
 {
 	"permissions": {
 		"allow": [
+			"Bash(node src/bin.ts:*)",
+			"Bash(node dist/bin.js:*)",
 			"Bash(node --test:*)",
 			"Bash(npm test:*)",
 			"Bash(npm run test:*)",
