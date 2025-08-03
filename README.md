@@ -1,8 +1,9 @@
 # @fal-works/conceptual-model
 
-A tiny toolkit for conceptual modeling.
+A small toolkit for conceptual class modeling.
 
-Currently this package provides:
+## Features
 
-- A JSON schema (similar to JGF v2.0 but more simplified and customized) for defining simple conceptual class models in JSON or YAML.
-- A converter that generates Mermaid class diagrams from the models
+- JSON Schema for defining simple conceptual models (in JSON or YAML)
+- API to convert models to Mermaid diagrams
+- CLI to convert YAML/JSON models to Mermaid diagrams (Node.js v22+ required)
