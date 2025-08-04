@@ -37,19 +37,19 @@ function main() {
 	if (unusedExportEntries.length === 0) {
 		console.log("✅ No unused exports found.");
 	} else {
-		const msg = [
-			"⚠️  Found unused exports",
-			"These modules export symbols that are not imported anywhere.",
-			"Consider removing the exports (or check if they were intended to be used elsewhere):",
-		].join("\n");
-		console.group(msg);
+		console.group("⚠️  Found unused exports");
 		exitCode = 1;
 		for (const [filePath, exports] of unusedExportEntries)
 			for (const exp of exports) {
-				const line = exp.location ? `:${exp.location.line}` : "";
-				console.log(`${normalizePath(filePath)}${line}`, "-", exp.exportName);
+				console.log(normalizePath(filePath), "-", exp.exportName);
 			}
 		console.groupEnd();
+		const msg = [
+			"",
+			"The modules above export symbols that are not imported anywhere.",
+			"Consider removing the exports (or check if they were intended to be used elsewhere).",
+		].join("\n");
+		console.warn(msg);
 	}
 
 	return exitCode;
