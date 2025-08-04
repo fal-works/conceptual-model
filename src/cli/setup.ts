@@ -22,7 +22,7 @@ export function createCLI(): ReturnType<typeof cac> {
 			"Save to file with same name but .mermaid extension (ignored if -o is used)",
 		)
 		.action(async (input, options) => {
-			await processInputPattern(input, options, "class-model-to-mermaid");
+			await processInputPattern(input, options, "class-model", "mermaid");
 		})
 		.example("conceptual-model class-model-to-mermaid model.yaml")
 		.example("conceptual-model class-model-to-mermaid model.json")

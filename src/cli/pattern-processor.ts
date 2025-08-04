@@ -1,7 +1,7 @@
 import { mkdirSync } from "node:fs";
 import { glob } from "node:fs/promises";
 import { basename, join } from "node:path";
-import type { ProcessType } from "../api/internal.ts";
+import type { ModelType, OutputTargetType } from "../api/internal.ts";
 import { changeExtension, validateFileExtension } from "./file.ts";
 import { transformFileToFile } from "./file-to-file.ts";
 
@@ -19,7 +19,8 @@ interface TransformationOptions {
 export async function processInputPattern(
 	pattern: string,
 	options: TransformationOptions,
-	processType: ProcessType,
+	modelType: ModelType,
+	outputTarget: OutputTargetType,
 ): Promise<void> {
 	// Detect if user intended glob pattern based on syntax
 	const isGlobPattern = /[*?[\]{}]/.test(pattern);
@@ -49,20 +50,20 @@ export async function processInputPattern(
 
 			// Process each file with output directory
 			for (const file of files) {
-				const outputFileName = changeExtension(basename(file), getOutputExtension(processType));
+				const outputFileName = changeExtension(basename(file), getOutputExtension(outputTarget));
 				const outputFile = join(options.output, outputFileName);
 
-				transformFileToFile(file, { output: outputFile }, processType);
+				transformFileToFile(file, { output: outputFile }, modelType, outputTarget);
 			}
 		} else {
 			// Use --save behavior for each file
 			for (const file of files) {
-				transformFileToFile(file, { save: true }, processType);
+				transformFileToFile(file, { save: true }, modelType, outputTarget);
 			}
 		}
 	} else {
 		// Single file case - preserve existing behavior
-		transformFileToFile(files[0], options, processType);
+		transformFileToFile(files[0], options, modelType, outputTarget);
 	}
 }
 
@@ -109,11 +110,11 @@ async function expandInputPattern(pattern: string): Promise<string[]> {
 }
 
 /**
- * Gets the output file extension for the given process type.
+ * Gets the output file extension for the given output target.
  */
-function getOutputExtension(processType: ProcessType): string {
-	switch (processType) {
-		case "class-model-to-mermaid":
+function getOutputExtension(outputTarget: OutputTargetType): string {
+	switch (outputTarget) {
+		case "mermaid":
 			return ".mermaid";
 		default:
 			return ".out";

@@ -2,9 +2,6 @@
  * @description Exports for CLI modules.
  */
 
-export { runStringPipeline } from "../core/string-pipeline.ts";
-export {
-	type InputFileFormat,
-	type ProcessType,
-	processToOutputTarget,
-} from "../core/types.ts";
+export { outputTargets } from "../core/output-targets.ts";
+export { convertModel, parseFileContent, validateModel } from "../core/pipeline.ts";
+export type { InputFileFormat, ModelType, OutputTargetType } from "../core/types.ts";

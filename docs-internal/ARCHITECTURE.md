@@ -9,14 +9,14 @@ This library provides two main capabilities:
 
 ## Transformation Data Flow
 
-The transformation follows a linear pipeline:
+The transformation uses atomic, composable functions:
 
 ```
-[JSON/YAML] → (parser) → [JS object] → (validator) → [typed object] → (converter) → [diagram format]
+[JSON/YAML] → parseFileContent() → [JS object] → validateModel() → [typed object] → convertModel() → [diagram format]
 ```
 
-- Validation uses JSON schemas managed by this library.
-- This transform pipeline pattern separates parsing concerns from validation and conversion logic, enabling arbitrary combinations of input formats with output formats.
+- Atomic functions enable flexible composition for different workflows
+- Validation uses JSON schemas managed by this library
 
 ## Module Organization
 
@@ -28,8 +28,8 @@ The codebase separates build-time tooling from runtime library code:
 
 **Runtime library (`src/`):**
 - `src/models/` - Schema definitions for different model types
-- `src/processes/` - Process specifications and implementations
-- `src/core/` - Core building blocks (parsers, pipeline, validation, types)
+- `src/converters/` - Converter implementations and registry
+- `src/core/` - Core atomic functions (parsers, pipeline, validation, types)
 - `src/api/` - Public APIs for end users
 - `src/cli/` - Command-line interface implementation
 

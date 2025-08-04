@@ -31,7 +31,7 @@ nodes:
 			};
 
 			try {
-				await processInputPattern(inputFile, {}, "class-model-to-mermaid");
+				await processInputPattern(inputFile, {}, "class-model", "mermaid");
 				assert.ok(output.includes("classDiagram"));
 			} finally {
 				console.log = originalLog;
@@ -54,7 +54,7 @@ nodes:
 			// Use forward slashes for glob patterns (cross-platform)
 			const globPattern = `${tempDir.replace(/\\/g, "/")}/*.yaml`;
 			await assert.rejects(
-				() => processInputPattern(globPattern, {}, "class-model-to-mermaid"),
+				() => processInputPattern(globPattern, {}, "class-model", "mermaid"),
 				/When using glob patterns, you must specify either --output \(directory\) or --save option/,
 			);
 		});
@@ -78,7 +78,7 @@ nodes:
 
 			try {
 				// This should work because it doesn't contain glob chars like * ? {} []
-				await processInputPattern(fileName, {}, "class-model-to-mermaid");
+				await processInputPattern(fileName, {}, "class-model", "mermaid");
 				assert.ok(output.includes("classDiagram"));
 			} finally {
 				console.log = originalLog;
@@ -107,7 +107,7 @@ nodes:
 			try {
 				// Use forward slashes for glob patterns (cross-platform)
 				const globPattern = `${tempDir.replace(/\\/g, "/")}/*.yaml`;
-				await processInputPattern(globPattern, { save: true }, "class-model-to-mermaid");
+				await processInputPattern(globPattern, { save: true }, "class-model", "mermaid");
 
 				// Should have created output files
 				assert.ok(existsSync(join(tempDir, "model1.mermaid")));
@@ -144,7 +144,7 @@ nodes:
 			try {
 				// Use forward slashes for glob patterns (cross-platform)
 				const globPattern = `${tempDir.replace(/\\/g, "/")}/*.yaml`;
-				await processInputPattern(globPattern, { output: outputDir }, "class-model-to-mermaid");
+				await processInputPattern(globPattern, { output: outputDir }, "class-model", "mermaid");
 
 				// Should have created output files in the specified directory
 				assert.ok(existsSync(join(outputDir, "input1.mermaid")));
@@ -166,7 +166,7 @@ nodes:
 			// Use forward slashes for glob patterns (cross-platform)
 			const globPattern = `${tempDir.replace(/\\/g, "/")}/*.txt`;
 			await assert.rejects(
-				() => processInputPattern(globPattern, { save: true }, "class-model-to-mermaid"),
+				() => processInputPattern(globPattern, { save: true }, "class-model", "mermaid"),
 				/File.*test\.txt.*has unsupported extension/,
 			);
 		});
@@ -182,7 +182,7 @@ nodes:
 			};
 
 			try {
-				await processInputPattern(globPattern, {}, "class-model-to-mermaid");
+				await processInputPattern(globPattern, {}, "class-model", "mermaid");
 				assert.ok(output.includes("No files found matching pattern"));
 				assert.ok(output.includes("*.nonexistent"));
 			} finally {
@@ -193,7 +193,7 @@ nodes:
 		it("should handle single file that doesn't exist gracefully", async () => {
 			// This should let the underlying transformFileToFile handle the error
 			await assert.rejects(
-				() => processInputPattern(join(tempDir, "nonexistent.yaml"), {}, "class-model-to-mermaid"),
+				() => processInputPattern(join(tempDir, "nonexistent.yaml"), {}, "class-model", "mermaid"),
 				/ENOENT|no such file or directory/,
 			);
 		});

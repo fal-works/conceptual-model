@@ -8,18 +8,21 @@
 export type InputFileFormat = "json" | "yaml";
 
 /**
- * Supported process types (model validation and conversion combinations).
+ * Type-safe mapping of which models can be converted to which outputs.
+ * This is the source of truth for all valid model-to-output combinations.
  */
-export type ProcessType = "class-model-to-mermaid";
+export type ModelToOutputMapping = {
+	"class-model": "mermaid";
+};
+
+/**
+ * Supported model types that can be processed.
+ * Derived from ModelToOutputMapping keys.
+ */
+export type ModelType = keyof ModelToOutputMapping;
 
 /**
  * Supported output target types.
+ * Derived from ModelToOutputMapping values.
  */
-export type OutputTargetType = "mermaid";
-
-/**
- * Mapping from process type to output target type.
- */
-export const processToOutputTarget: Record<ProcessType, OutputTargetType> = {
-	"class-model-to-mermaid": "mermaid",
-};
+export type OutputTargetType = ModelToOutputMapping[keyof ModelToOutputMapping];

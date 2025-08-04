@@ -1,6 +1,12 @@
 import { readFileSync, writeFileSync } from "node:fs";
-import { type ProcessType, processToOutputTarget, runStringPipeline } from "../api/internal.ts";
-import { outputTargets } from "../core/output-targets.ts";
+import {
+	convertModel,
+	type ModelType,
+	type OutputTargetType,
+	outputTargets,
+	parseFileContent,
+	validateModel,
+} from "../api/internal.ts";
 import { changeExtension, detectInputFormat, validateFileExtension } from "./file.ts";
 
 /**
@@ -12,15 +18,15 @@ interface TransformationOptions {
 }
 
 /**
- * Generic file-to-file transformation workflow.
+ * Generic file-to-file transformation workflow using atomic functions.
  */
 export function transformFileToFile(
 	inputFile: string,
 	options: TransformationOptions,
-	processType: ProcessType,
+	modelType: ModelType,
+	outputTarget: OutputTargetType,
 ): void {
 	const inputFormat = detectInputFormat(inputFile);
-	const outputTarget = processToOutputTarget[processType];
 	const outputConfig = outputTargets[outputTarget];
 
 	let outputFile = options.output;
@@ -31,7 +37,11 @@ export function transformFileToFile(
 	}
 
 	const content = readFileSync(inputFile, "utf-8");
-	const diagram = runStringPipeline(content, inputFormat, processType);
+
+	// Use atomic functions directly
+	const parsedData = parseFileContent(content, inputFormat);
+	const model = validateModel(parsedData, modelType);
+	const diagram = convertModel(model, modelType, outputTarget);
 
 	if (outputFile) {
 		writeFileSync(outputFile, diagram);

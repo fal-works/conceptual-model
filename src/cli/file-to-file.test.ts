@@ -35,7 +35,7 @@ nodes:
 
 			try {
 				// Test with actual class-model -> mermaid transformation
-				transformFileToFile(testInputFile, {}, "class-model-to-mermaid");
+				transformFileToFile(testInputFile, {}, "class-model", "mermaid");
 				assert.ok(output.includes("classDiagram"));
 			} finally {
 				console.log = originalLog;
@@ -57,7 +57,7 @@ nodes:
 			};
 
 			try {
-				transformFileToFile(testInputFile, { save: true }, "class-model-to-mermaid");
+				transformFileToFile(testInputFile, { save: true }, "class-model", "mermaid");
 
 				assert.ok(output.includes("Mermaid diagram written to:"));
 				assert.ok(output.includes("from YAML"));
@@ -86,7 +86,7 @@ nodes:
 			};
 
 			try {
-				transformFileToFile(testInputFile, { output: testOutputFile }, "class-model-to-mermaid");
+				transformFileToFile(testInputFile, { output: testOutputFile }, "class-model", "mermaid");
 
 				assert.ok(output.includes("Mermaid diagram written to:"));
 				assert.ok(output.includes(testOutputFile));
@@ -105,7 +105,7 @@ nodes:
 
 			assert.throws(
 				() =>
-					transformFileToFile(testInputFile, { output: "invalid.txt" }, "class-model-to-mermaid"),
+					transformFileToFile(testInputFile, { output: "invalid.txt" }, "class-model", "mermaid"),
 				/Expected \.mmd or \.mermaid file, but got \.txt/,
 			);
 		});
