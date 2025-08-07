@@ -12,6 +12,11 @@ export const schema = {
 	properties: {
 		$schema: { title: "JSON schema URL", type: "string" },
 		title: { title: "Model title", type: "string" },
+		groups: {
+			title: "Model groups",
+			type: "object",
+			additionalProperties: { $ref: "#/definitions/group" },
+		},
 		nodes: {
 			title: "Model nodes",
 			type: "object",
@@ -22,6 +27,16 @@ export const schema = {
 	},
 	additionalProperties: true,
 	definitions: {
+		group: {
+			title: "Model group",
+			type: "object",
+			properties: {
+				label: { title: "Group label", type: "string" },
+				nodes: { title: "Group nodes", type: "array", items: { type: "string" } },
+			},
+			required: ["nodes"],
+			additionalProperties: false,
+		},
 		node: {
 			title: "Model node",
 			oneOf: [

@@ -8,8 +8,11 @@ When generating example models, follow these guidelines:
     - Generate valid YAML against schema `@docs/schema/v0.x/class-model.json`
     - Begin YAML with modeline: `# yaml-language-server: $schema=../docs/schema/v0.x/class-model.json`
     - Minimize quotes - quote only to avoid YAML syntax errors
+- Groups
+    - Avoid using groups unless necessary
+    - When using groups, ensure each node belongs to at most one group
 - Nodes
-    - Add attributes sparingly - only for essential ones, prefer separate classes
+    - Add attributes sparingly - only for most essential ones, prefer separate classes
 - Edges
     - Property order:
         - `source`

@@ -20,6 +20,14 @@
 			"type": "string",
 			"description": "Description of this model."
 		},
+		"groups": {
+			"title": "Model groups",
+			"type": "object",
+			"description": "Collection of groups for organizing nodes. Each key is a unique group identifier.",
+			"additionalProperties": {
+				"$ref": "#/definitions/group"
+			}
+		},
 		"nodes": {
 			"title": "Model nodes",
 			"type": "object",
@@ -42,6 +50,28 @@
 	},
 	"additionalProperties": true,
 	"definitions": {
+		"group": {
+			"title": "Model group",
+			"type": "object",
+			"description": "A group for organizing related nodes in the model.",
+			"properties": {
+				"label": {
+					"title": "Group label",
+					"type": "string",
+					"description": "Display name for this group. Can contain \\n for line breaks. If omitted, the node key will be used as display name."
+				},
+				"nodes": {
+					"title": "Group nodes",
+					"type": "array",
+					"description": "List of node identifiers (keys) that belong to this group.",
+					"items": {
+						"type": "string"
+					}
+				}
+			},
+			"required": ["nodes"],
+			"additionalProperties": false
+		},
 		"node": {
 			"title": "Model node",
 			"description": "A single class, entity, or concept in the model.",

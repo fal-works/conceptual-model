@@ -1,5 +1,13 @@
-import type { ClassModel, ClassModelEdge, ClassModelNode } from "../models/class-model/index.ts";
+import type {
+	ClassModel,
+	ClassModelEdge,
+	ClassModelGroup,
+	ClassModelNode,
+} from "../models/class-model/index.ts";
 
+/**
+ * Converts a relation type to the corresponding Mermaid arrow syntax.
+ */
 function getRelationArrow(relation?: ClassModelEdge["relation"]): string {
 	switch (relation) {
 		case "is-a":
@@ -19,6 +27,10 @@ function getRelationArrow(relation?: ClassModelEdge["relation"]): string {
 	}
 }
 
+/**
+ * Parses multiplicity string and formats it for Mermaid diagram source and target sides.
+ * Supports both single multiplicity (applies to target) and directional format (source->target).
+ */
 function formatMultiplicity(multiplicity?: string): {
 	source: string;
 	target: string;
@@ -43,6 +55,33 @@ function formatMultiplicity(multiplicity?: string): {
 	};
 }
 
+/**
+ * Generates Mermaid class diagram lines for a single node.
+ * Handles class declaration, optional label, and attributes with proper indentation.
+ */
+function generateNodeLines(nodeName: string, node: ClassModelNode | null): string[] {
+	const className = nodeName.replace(/[()]/g, "_");
+	const classDeclaration = node?.label
+		? `    class ${className}["${node.label.replace(/\n|\\n/g, "<br>")}"]`
+		: `    class ${className}`;
+
+	if (node?.attributes && node.attributes.length > 0) {
+		const lines = [`${classDeclaration} {`];
+		for (const field of node.attributes) {
+			lines.push(`        ${field}`);
+		}
+		lines.push("    }");
+		return lines;
+	} else {
+		return [classDeclaration];
+	}
+}
+
+/**
+ * Converts a ClassModel to Mermaid class diagram syntax.
+ * Supports groups as namespaces, node attributes, relationships, and layout options.
+ * Throws an error if a node belongs to multiple groups.
+ */
 export function convertToMermaidClassDiagram(model: ClassModel): string {
 	const lines: string[] = [];
 
@@ -59,23 +98,39 @@ export function convertToMermaidClassDiagram(model: ClassModel): string {
 		lines.push(`    title ${model.title}`);
 	}
 
-	// Generate classes
-	for (const [nodeName, nodeData] of Object.entries(model.nodes ?? {})) {
-		const node = nodeData as ClassModelNode | null;
-		const className = nodeName.replace(/[()]/g, "_");
-		const classDeclaration = node?.label
-			? `class ${className}["${node.label.replace(/\n|\\n/g, "<br>")}"]`
-			: `class ${className}`;
+	const processedNodes = new Set<string>();
 
-		if (node?.attributes && node.attributes.length > 0) {
-			lines.push(`    ${classDeclaration} {`);
-			for (const field of node.attributes) {
-				lines.push(`        ${field}`);
+	// Generate grouped classes
+	if (model.groups) {
+		for (const [groupKey, groupData] of Object.entries(model.groups)) {
+			const group = groupData as ClassModelGroup | null;
+			if (!group?.nodes || group.nodes.length === 0) continue;
+
+			const namespaceName = group.label || groupKey;
+			lines.push(`namespace ${namespaceName} {`);
+
+			for (const nodeName of group.nodes) {
+				if (processedNodes.has(nodeName)) {
+					throw new Error(`Node '${nodeName}' belongs to multiple groups`);
+				}
+				processedNodes.add(nodeName);
+
+				const node = model.nodes?.[nodeName] as ClassModelNode | null;
+				const nodeLines = generateNodeLines(nodeName, node);
+				lines.push(...nodeLines);
 			}
-			lines.push("    }");
-		} else {
-			lines.push(`    ${classDeclaration}`);
+
+			lines.push("}");
 		}
+	}
+
+	// Generate ungrouped classes
+	for (const nodeName of Object.keys(model.nodes ?? {})) {
+		if (processedNodes.has(nodeName)) continue;
+
+		const node = model.nodes?.[nodeName] as ClassModelNode | null;
+		const nodeLines = generateNodeLines(nodeName, node);
+		lines.push(...nodeLines);
 	}
 
 	// Generate relationships

@@ -11,6 +11,12 @@ export { schema as classModelSchema };
 export type ClassModel = FromSchema<typeof schema>;
 
 /**
+ * TypeScript type for a single group in the model.
+ * Represents a group for organizing related nodes.
+ */
+export type ClassModelGroup = NonNullable<ClassModel["groups"]>[string];
+
+/**
  * TypeScript type for a single node (class) in the model.
  * Represents a class, entity, or concept with optional attributes.
  */
