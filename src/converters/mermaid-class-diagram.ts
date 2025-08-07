@@ -85,17 +85,19 @@ function generateNodeLines(nodeName: string, node: ClassModelNode | null): strin
 export function convertToMermaidClassDiagram(model: ClassModel): string {
 	const lines: string[] = [];
 
+	// Add title as frontmatter if available
+	if (model.title) {
+		lines.push("---");
+		lines.push(`title: ${model.title}`);
+		lines.push("---");
+	}
+
 	// Start with classDiagram directive
 	lines.push("classDiagram");
 
 	// Add direction if available
 	if (model.layout?.direction) {
 		lines.push(`    direction ${model.layout.direction}`);
-	}
-
-	// Add title if available
-	if (model.title) {
-		lines.push(`    title ${model.title}`);
 	}
 
 	const processedNodes = new Set<string>();

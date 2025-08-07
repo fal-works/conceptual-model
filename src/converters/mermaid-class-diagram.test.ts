@@ -86,7 +86,7 @@ describe("convertToMermaidClassDiagram", () => {
 			};
 			const result = convertToMermaidClassDiagram(model);
 
-			assert.ok(result.includes("title Test Diagram"));
+			assert.ok(result.includes("---\ntitle: Test Diagram\n---"));
 		});
 	});
 
@@ -504,7 +504,7 @@ describe("convertToMermaidClassDiagram", () => {
 
 			assert.ok(result.includes("classDiagram"));
 			assert.ok(result.includes("direction TB"));
-			assert.ok(result.includes("title Complete Example"));
+			assert.ok(result.includes("---\ntitle: Complete Example\n---"));
 			assert.ok(result.includes('class Library["Library"]'));
 			assert.ok(result.includes('class Book["Book"] {'));
 			assert.ok(result.includes("isbn"));
@@ -562,7 +562,7 @@ describe("convertToMermaidClassDiagram", () => {
 			// Basic structure
 			assert.ok(result.includes("classDiagram"));
 			assert.ok(result.includes("direction TB"));
-			assert.ok(result.includes("title Library Management System"));
+			assert.ok(result.includes("---\ntitle: Library Management System\n---"));
 
 			// Groups/namespaces
 			assert.ok(result.includes("namespace Core Entities {"));
