@@ -7,6 +7,7 @@ import {
 	parseFileContent,
 	validateModel,
 } from "../api/internal.ts";
+import type { ConverterOptionsType } from "../converters/index.ts";
 import { changeExtension, detectInputFormat, validateFileExtension } from "./file.ts";
 
 /**
@@ -15,6 +16,37 @@ import { changeExtension, detectInputFormat, validateFileExtension } from "./fil
 interface TransformationOptions {
 	output?: string;
 	save?: boolean;
+	autoClassLabels?: boolean;
+}
+
+/**
+ * Builds converter-specific options from transformation options for class-model to mermaid.
+ */
+function buildClassModelMermaidOptions(
+	transformationOptions: TransformationOptions,
+): ConverterOptionsType<"class-model", "mermaid"> | undefined {
+	// Only build options object if user provided values
+	if (transformationOptions.autoClassLabels !== undefined) {
+		return {
+			autoClassLabels: transformationOptions.autoClassLabels,
+		};
+	}
+	return undefined;
+}
+
+/**
+ * Builds converter-specific options from transformation options.
+ * Returns undefined for combinations that don't support options.
+ */
+function buildConverterOptions<T extends ModelType, O extends OutputTargetType>(
+	modelType: T,
+	outputTarget: O,
+	transformationOptions: TransformationOptions,
+): ConverterOptionsType<T, O> | undefined {
+	if (modelType === "class-model" && outputTarget === "mermaid") {
+		return buildClassModelMermaidOptions(transformationOptions) as ConverterOptionsType<T, O>;
+	}
+	return undefined;
 }
 
 /**
@@ -41,7 +73,10 @@ export function transformFileToFile(
 	// Use atomic functions directly
 	const parsedData = parseFileContent(content, inputFormat);
 	const model = validateModel(parsedData, modelType);
-	const diagram = convertModel(model, modelType, outputTarget);
+
+	// Build converter-specific options and convert model
+	const converterOptions = buildConverterOptions(modelType, outputTarget, options);
+	const diagram = convertModel(model, modelType, outputTarget, converterOptions);
 
 	if (outputFile) {
 		writeFileSync(outputFile, diagram);

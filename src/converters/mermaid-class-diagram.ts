@@ -6,6 +6,51 @@ import type {
 } from "../models/class-model/index.ts";
 
 /**
+ * Configuration for Mermaid class diagram generation.
+ * All properties are required.
+ */
+interface MermaidClassDiagramConfig {
+	/**
+	 * Automatically generate class labels if no specific label is specified.
+	 * Converts Pascal/camelCase to space-separated lowercase.
+	 * Examples: "JSONError" -> "JSON error", "UserAccount" -> "user account"
+	 */
+	autoClassLabels: boolean;
+}
+
+/**
+ * Optional configuration type for public API.
+ */
+export type MermaidClassDiagramOptions = Partial<MermaidClassDiagramConfig>;
+
+/**
+ * Default configuration for Mermaid class diagram generation.
+ */
+const DEFAULT_CONFIG: MermaidClassDiagramConfig = {
+	autoClassLabels: false,
+};
+
+/**
+ * Merges user options with defaults to create complete configuration.
+ */
+function createConfig(userOptions?: MermaidClassDiagramOptions): MermaidClassDiagramConfig {
+	return {
+		...DEFAULT_CONFIG,
+		...userOptions,
+	};
+}
+
+/**
+ * Converts Pascal/camelCase to space-separated lowercase.
+ * Preserves all-caps acronyms (e.g., "JSONError" -> "JSON error", "InputFileFormat" -> "input file format").
+ */
+function generateAutoLabel(className: string): string {
+	return className
+		.replace(/([a-z])(?=[A-Z])|([A-Z]+)(?=[A-Z][a-z])/g, "$& ")
+		.replace(/\b([A-Z][a-z]+)/g, (m) => m.toLowerCase());
+}
+
+/**
  * Converts a relation type to the corresponding Mermaid arrow syntax.
  */
 function getRelationArrow(relation?: ClassModelEdge["relation"]): string {
@@ -59,11 +104,23 @@ function formatMultiplicity(multiplicity?: string): {
  * Generates Mermaid class diagram lines for a single node.
  * Handles class declaration, optional label, and attributes with proper indentation.
  */
-function generateNodeLines(nodeName: string, node: ClassModelNode | null): string[] {
+function generateNodeLines(
+	nodeName: string,
+	node: ClassModelNode | null | undefined,
+	config: MermaidClassDiagramConfig,
+): string[] {
 	const className = nodeName.replace(/[()]/g, "_");
+
+	let effectiveLabel = node?.label;
+
+	// Use auto-generated label if enabled and no explicit label is provided
+	if (config.autoClassLabels && !node?.label) {
+		effectiveLabel = generateAutoLabel(nodeName);
+	}
+
 	const classDeclaration =
-		node?.label && node.label !== nodeName
-			? `    class ${className}["${node.label.replace(/\n|\\n/g, "<br>")}"]`
+		effectiveLabel && effectiveLabel !== nodeName
+			? `    class ${className}["${effectiveLabel.replace(/\n|\\n/g, "<br>")}"]`
 			: `    class ${className}`;
 
 	if (node?.attributes && node.attributes.length > 0) {
@@ -83,7 +140,11 @@ function generateNodeLines(nodeName: string, node: ClassModelNode | null): strin
  * Supports groups as namespaces, node attributes, relationships, and layout options.
  * Throws an error if a node belongs to multiple groups.
  */
-export function convertToMermaidClassDiagram(model: ClassModel): string {
+export function convertToMermaidClassDiagram(
+	model: ClassModel,
+	options?: MermaidClassDiagramOptions,
+): string {
+	const config = createConfig(options);
 	const lines: string[] = [];
 
 	// Add title as frontmatter if available
@@ -106,7 +167,7 @@ export function convertToMermaidClassDiagram(model: ClassModel): string {
 	// Generate grouped classes
 	if (model.groups) {
 		for (const [groupKey, groupData] of Object.entries(model.groups)) {
-			const group = groupData as ClassModelGroup | null;
+			const group: ClassModelGroup | null = groupData;
 			if (!group?.nodes || group.nodes.length === 0) continue;
 
 			const namespaceName = groupKey;
@@ -118,8 +179,8 @@ export function convertToMermaidClassDiagram(model: ClassModel): string {
 				}
 				processedNodes.add(nodeName);
 
-				const node = model.nodes?.[nodeName] as ClassModelNode | null;
-				const nodeLines = generateNodeLines(nodeName, node);
+				const node: ClassModelNode | undefined = model.nodes?.[nodeName];
+				const nodeLines = generateNodeLines(nodeName, node, config);
 				lines.push(...nodeLines);
 			}
 
@@ -131,8 +192,8 @@ export function convertToMermaidClassDiagram(model: ClassModel): string {
 	for (const nodeName of Object.keys(model.nodes ?? {})) {
 		if (processedNodes.has(nodeName)) continue;
 
-		const node = model.nodes?.[nodeName] as ClassModelNode | null;
-		const nodeLines = generateNodeLines(nodeName, node);
+		const node: ClassModelNode | undefined = model.nodes?.[nodeName];
+		const nodeLines = generateNodeLines(nodeName, node, config);
 		lines.push(...nodeLines);
 	}
 

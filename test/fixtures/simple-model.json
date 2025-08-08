@@ -6,13 +6,19 @@
 		},
 		"Library": {
 			"label": "Library"
-		}
+		},
+		"FileManager": {}
 	},
 	"edges": [
 		{
 			"source": "Library",
 			"target": "Book",
 			"relation": "is-composed-of"
+		},
+		{
+			"source": "FileManager",
+			"target": "Book",
+			"relation": "refers-to"
 		}
 	]
 }

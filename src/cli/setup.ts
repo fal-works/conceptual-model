@@ -21,6 +21,10 @@ export function createCLI(): ReturnType<typeof cac> {
 			"-s, --save",
 			"Save to file with same name but .mermaid extension (ignored if -o is used)",
 		)
+		.option(
+			"--auto-class-labels",
+			"Automatically generate class labels from class names (converts Pascal/camelCase to space-separated lowercase)",
+		)
 		.action(async (input, options) => {
 			await processInputPattern(input, options, "class-model", "mermaid");
 		})
@@ -28,6 +32,7 @@ export function createCLI(): ReturnType<typeof cac> {
 		.example("conceptual-model class-model-to-mermaid model.json")
 		.example("conceptual-model class-model-to-mermaid -o diagram.mermaid model.yaml")
 		.example("conceptual-model class-model-to-mermaid --save model.json")
+		.example("conceptual-model class-model-to-mermaid --auto-class-labels --save model.json")
 		.example("conceptual-model class-model-to-mermaid --save '**/*.yaml'")
 		.example("conceptual-model class-model-to-mermaid -o output-dir 'models/*.{yaml,json}'");
 

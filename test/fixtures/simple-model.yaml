@@ -6,7 +6,12 @@ nodes:
       - isbn
   Library:
     label: Library
+  FileManager:
+    # No explicit label - will use auto-generation when --auto-class-labels is enabled
 edges:
   - source: Library
     target: Book
     relation: is-composed-of
+  - source: FileManager
+    target: Book
+    relation: refers-to

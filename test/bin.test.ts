@@ -98,6 +98,25 @@ describe("CLI Integration Tests", () => {
 			assert.ok(existsSync("test-out/glob-output/simple-model.mermaid"));
 		});
 
+		it("should support --auto-class-labels option", async () => {
+			const { stdout } = await execBin(
+				"class-model-to-mermaid",
+				"test/fixtures/simple-model.yaml",
+				"--auto-class-labels",
+			);
+
+			// Should generate diagram successfully
+			assert.ok(stdout.includes("classDiagram"));
+
+			// Explicit labels are respected but omitted when they match node name (to avoid redundancy)
+			assert.ok(stdout.includes("class Book"));
+			assert.ok(!stdout.includes('class Book["Book"]'));
+			assert.ok(stdout.includes("class Library"));
+			assert.ok(!stdout.includes('class Library["Library"]'));
+			// Node without explicit label gets auto-generated label
+			assert.ok(stdout.includes('class FileManager["file manager"]'));
+		});
+
 		describe("with custom output files", () => {
 			let tempDir: string;
 			let testCounter = 1;

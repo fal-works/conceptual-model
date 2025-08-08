@@ -1,4 +1,5 @@
-import { getConverter, type ModelFromType } from "../converters/index.ts";
+import type { ConverterOptionsType, ModelFromType } from "../converters/index.ts";
+import { getConverter } from "../converters/index.ts";
 import { classModelSchema } from "../models/class-model/index.ts";
 import { parsers } from "./parsers.ts";
 import type { InputFileFormat, ModelToOutputMapping, ModelType } from "./types.ts";
@@ -54,15 +55,17 @@ export function validateModel<T extends ModelType>(data: unknown, modelType: T):
  * @param model - The model to convert
  * @param modelType - The type of the model
  * @param outputTarget - The desired output format
+ * @param options - Additional options for the conversion
  * @returns The converted string representation
  */
 export function convertModel<T extends ModelType, O extends ModelToOutputMapping[T]>(
 	model: ModelFromType<T>,
 	modelType: T,
 	outputTarget: O,
+	options?: ConverterOptionsType<T, O>,
 ): string {
 	const converter = getConverter(modelType, outputTarget);
-	return converter(model);
+	return converter(model, options);
 }
 
 /**

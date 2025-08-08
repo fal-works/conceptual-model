@@ -11,6 +11,7 @@ import { transformFileToFile } from "./file-to-file.ts";
 interface TransformationOptions {
 	output?: string;
 	save?: boolean;
+	autoLabels?: boolean;
 }
 
 /**

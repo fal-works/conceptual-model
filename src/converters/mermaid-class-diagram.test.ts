@@ -592,4 +592,153 @@ describe("convertToMermaidClassDiagram", () => {
 			assert.ok(result.includes('User "1" --> "0..*" Loan'));
 		});
 	});
+
+	describe("options", () => {
+		describe("autoClassLabels", () => {
+			it("should generate auto labels for class names without explicit labels", () => {
+				const model: ClassModel = {
+					nodes: {
+						UserAccount: {},
+						JSONError: {},
+						SimpleClass: {},
+					},
+				};
+				const result = convertToMermaidClassDiagram(model, { autoClassLabels: true });
+
+				assert.ok(result.includes('class UserAccount["user account"]'));
+				assert.ok(result.includes('class JSONError["JSON error"]'));
+				assert.ok(result.includes('class SimpleClass["simple class"]'));
+			});
+
+			it("should not override explicit labels when autoClassLabels is enabled", () => {
+				const model: ClassModel = {
+					nodes: {
+						UserAccount: { label: "Custom User Account" },
+						JSONError: {},
+					},
+				};
+				const result = convertToMermaidClassDiagram(model, { autoClassLabels: true });
+
+				assert.ok(result.includes('class UserAccount["Custom User Account"]'));
+				assert.ok(result.includes('class JSONError["JSON error"]'));
+			});
+
+			it("should respect explicit labels but omit when they match node name", () => {
+				const model: ClassModel = {
+					nodes: {
+						Book: { label: "Book" }, // Explicit label that matches node name - should be omitted
+						FileManager: { label: "Custom File Manager" }, // Explicit label different from node name - should be shown
+						Parser: {}, // No explicit label - should get auto-generated
+					},
+				};
+				const result = convertToMermaidClassDiagram(model, { autoClassLabels: true });
+
+				// Explicit labels are respected: matching labels omitted, different labels shown
+				assert.ok(result.includes("class Book"));
+				assert.ok(!result.includes('class Book["Book"]'));
+				assert.ok(result.includes('class FileManager["Custom File Manager"]'));
+				// No label gets auto-generated
+				assert.ok(result.includes('class Parser["parser"]'));
+			});
+
+			it("should handle complex class names with multiple capitals", () => {
+				const model: ClassModel = {
+					nodes: {
+						XMLHttpRequest: {},
+						APIResponseHandler: {},
+						URLPath: {},
+						IDGenerator: {},
+					},
+				};
+				const result = convertToMermaidClassDiagram(model, { autoClassLabels: true });
+
+				assert.ok(result.includes('class XMLHttpRequest["XML http request"]'));
+				assert.ok(result.includes('class APIResponseHandler["API response handler"]'));
+				assert.ok(result.includes('class URLPath["URL path"]'));
+				assert.ok(result.includes('class IDGenerator["ID generator"]'));
+			});
+
+			it("should handle camelCase class names", () => {
+				const model: ClassModel = {
+					nodes: {
+						userAccount: {},
+						jsonError: {},
+						simpleClass: {},
+					},
+				};
+				const result = convertToMermaidClassDiagram(model, { autoClassLabels: true });
+
+				assert.ok(result.includes('class userAccount["user account"]'));
+				assert.ok(result.includes('class jsonError["json error"]'));
+				assert.ok(result.includes('class simpleClass["simple class"]'));
+			});
+
+			it("should handle mixed case names with consecutive capitals", () => {
+				const model: ClassModel = {
+					nodes: {
+						InputFileFormat: {},
+						InputFileFormatType: {},
+						JSONInputFormat: {},
+						YAMLInputFormat: {},
+					},
+				};
+				const result = convertToMermaidClassDiagram(model, { autoClassLabels: true });
+
+				assert.ok(result.includes('class InputFileFormat["input file format"]'));
+				assert.ok(result.includes('class InputFileFormatType["input file format type"]'));
+				assert.ok(result.includes('class JSONInputFormat["JSON input format"]'));
+				assert.ok(result.includes('class YAMLInputFormat["YAML input format"]'));
+			});
+
+			it("should not generate auto labels when autoClassLabels is false", () => {
+				const model: ClassModel = {
+					nodes: {
+						UserAccount: {},
+						JSONError: {},
+					},
+				};
+				const result = convertToMermaidClassDiagram(model, { autoClassLabels: false });
+
+				assert.ok(result.includes("class UserAccount"));
+				assert.ok(!result.includes('class UserAccount["user account"]'));
+				assert.ok(result.includes("class JSONError"));
+				assert.ok(!result.includes('class JSONError["JSON error"]'));
+			});
+
+			it("should not generate auto labels when no options provided", () => {
+				const model: ClassModel = {
+					nodes: {
+						UserAccount: {},
+						JSONError: {},
+					},
+				};
+				const result = convertToMermaidClassDiagram(model);
+
+				assert.ok(result.includes("class UserAccount"));
+				assert.ok(!result.includes('class UserAccount["user account"]'));
+				assert.ok(result.includes("class JSONError"));
+				assert.ok(!result.includes('class JSONError["JSON error"]'));
+			});
+
+			it("should work with grouped classes", () => {
+				const model: ClassModel = {
+					nodes: {
+						UserAccount: {},
+						AdminPanel: {},
+						JSONError: {},
+					},
+					groups: {
+						ui: {
+							nodes: ["UserAccount", "AdminPanel"],
+						},
+					},
+				};
+				const result = convertToMermaidClassDiagram(model, { autoClassLabels: true });
+
+				assert.ok(result.includes('    class UserAccount["user account"]'));
+				assert.ok(result.includes('    class AdminPanel["admin panel"]'));
+				assert.ok(result.includes('class JSONError["JSON error"]'));
+			});
+		});
+	});
 });

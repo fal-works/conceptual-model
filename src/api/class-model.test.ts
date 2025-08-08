@@ -175,5 +175,46 @@ edges: []
 			const result = classModelToMermaid(model);
 			assert.ok(result.includes("classDiagram"));
 		});
+
+		it("should support options parameter", () => {
+			const model: ClassModel = {
+				nodes: {
+					UserAccount: {},
+					JSONError: {},
+				},
+			};
+
+			const result = classModelToMermaid(model, { autoClassLabels: true });
+
+			assert.ok(result.includes('class UserAccount["user account"]'));
+			assert.ok(result.includes('class JSONError["JSON error"]'));
+		});
+
+		it("should support options in yamlToMermaid", () => {
+			const yaml = `
+nodes:
+  UserAccount: {}
+  JSONError: {}
+`;
+
+			const result = classModelYamlToMermaid(yaml, { autoClassLabels: true });
+
+			assert.ok(result.includes('class UserAccount["user account"]'));
+			assert.ok(result.includes('class JSONError["JSON error"]'));
+		});
+
+		it("should support options in jsonToMermaid", () => {
+			const json = JSON.stringify({
+				nodes: {
+					UserAccount: {},
+					JSONError: {},
+				},
+			});
+
+			const result = classModelJsonToMermaid(json, { autoClassLabels: true });
+
+			assert.ok(result.includes('class UserAccount["user account"]'));
+			assert.ok(result.includes('class JSONError["JSON error"]'));
+		});
 	});
 });
