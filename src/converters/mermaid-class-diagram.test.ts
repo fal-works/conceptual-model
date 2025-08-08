@@ -47,11 +47,9 @@ function createModelWithGroups(): ClassModel {
 		},
 		groups: {
 			group1: {
-				label: "Group 1",
 				nodes: ["ClassA", "ClassB"],
 			},
 			group2: {
-				label: "Group 2",
 				nodes: ["ClassC"],
 			},
 		},
@@ -358,8 +356,8 @@ describe("convertToMermaidClassDiagram", () => {
 			const model = createModelWithGroups();
 			const result = convertToMermaidClassDiagram(model);
 
-			assert.ok(result.includes("namespace Group 1 {"));
-			assert.ok(result.includes("namespace Group 2 {"));
+			assert.ok(result.includes("namespace group1 {"));
+			assert.ok(result.includes("namespace group2 {"));
 		});
 
 		it("should place grouped nodes inside namespaces", () => {
@@ -410,11 +408,9 @@ describe("convertToMermaidClassDiagram", () => {
 				},
 				groups: {
 					empty_group: {
-						label: "Empty Group",
 						nodes: [],
 					},
 					valid_group: {
-						label: "Valid Group",
 						nodes: ["TestClass"],
 					},
 				},
@@ -422,9 +418,9 @@ describe("convertToMermaidClassDiagram", () => {
 			const result = convertToMermaidClassDiagram(model);
 
 			// Empty group should not appear
-			assert.ok(!result.includes("namespace Empty Group {"));
+			assert.ok(!result.includes("namespace empty_group {"));
 			// Valid group should appear
-			assert.ok(result.includes("namespace Valid Group {"));
+			assert.ok(result.includes("namespace valid_group {"));
 		});
 
 		it("should handle groups with nonexistent nodes", () => {
@@ -434,7 +430,6 @@ describe("convertToMermaidClassDiagram", () => {
 				},
 				groups: {
 					test_group: {
-						label: "Test Group",
 						nodes: ["ExistingClass", "NonexistentClass"],
 					},
 				},
@@ -442,7 +437,7 @@ describe("convertToMermaidClassDiagram", () => {
 			const result = convertToMermaidClassDiagram(model);
 
 			// Should process existing nodes normally
-			assert.ok(result.includes("namespace Test Group {"));
+			assert.ok(result.includes("namespace test_group {"));
 			assert.ok(result.includes('    class ExistingClass["Existing"]'));
 		});
 
@@ -454,11 +449,9 @@ describe("convertToMermaidClassDiagram", () => {
 				},
 				groups: {
 					group1: {
-						label: "Group 1",
 						nodes: ["SharedClass"],
 					},
 					group2: {
-						label: "Group 2",
 						nodes: ["SharedClass", "OtherClass"],
 					},
 				},
@@ -480,14 +473,13 @@ describe("convertToMermaidClassDiagram", () => {
 				},
 				groups: {
 					test_group: {
-						label: "Test Group",
 						nodes: ["ClassWithAttrs"],
 					},
 				},
 			};
 			const result = convertToMermaidClassDiagram(model);
 
-			assert.ok(result.includes("namespace Test Group {"));
+			assert.ok(result.includes("namespace test_group {"));
 			assert.ok(result.includes('    class ClassWithAttrs["Class With Attributes"] {'));
 			assert.ok(result.includes("        attr1"));
 			assert.ok(result.includes("        attr2"));
@@ -553,11 +545,9 @@ describe("convertToMermaidClassDiagram", () => {
 				},
 				groups: {
 					entities: {
-						label: "Core Entities",
 						nodes: ["Library", "Book", "User"],
 					},
 					transactions: {
-						label: "Transactions",
 						nodes: ["Loan"],
 					},
 				},
@@ -585,8 +575,8 @@ describe("convertToMermaidClassDiagram", () => {
 			assert.ok(result.includes("---\ntitle: Library Management System\n---"));
 
 			// Groups/namespaces
-			assert.ok(result.includes("namespace Core Entities {"));
-			assert.ok(result.includes("namespace Transactions {"));
+			assert.ok(result.includes("namespace entities {"));
+			assert.ok(result.includes("namespace transactions {"));
 
 			// Grouped nodes
 			assert.ok(result.includes("    class Library"));

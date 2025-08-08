@@ -30,10 +30,7 @@ export const schema = {
 		group: {
 			title: "Model group",
 			type: "object",
-			properties: {
-				label: { title: "Group label", type: "string" },
-				nodes: { title: "Group nodes", type: "array", items: { type: "string" } },
-			},
+			properties: { nodes: { title: "Group nodes", type: "array", items: { type: "string" } } },
 			required: ["nodes"],
 			additionalProperties: false,
 		},

@@ -48,10 +48,6 @@ definitions:
     type: object
     description: A group for organizing related nodes in the model.
     properties:
-      label:
-        title: Group label
-        type: string
-        description: Display name for this group. Can contain \n for line breaks. If omitted, the node key will be used as display name.
       nodes:
         title: Group nodes
         type: array

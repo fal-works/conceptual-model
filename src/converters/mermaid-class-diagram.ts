@@ -109,7 +109,7 @@ export function convertToMermaidClassDiagram(model: ClassModel): string {
 			const group = groupData as ClassModelGroup | null;
 			if (!group?.nodes || group.nodes.length === 0) continue;
 
-			const namespaceName = group.label || groupKey;
+			const namespaceName = groupKey;
 			lines.push(`namespace ${namespaceName} {`);
 
 			for (const nodeName of group.nodes) {
