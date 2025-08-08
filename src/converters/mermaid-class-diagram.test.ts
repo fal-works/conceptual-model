@@ -118,6 +118,26 @@ describe("convertToMermaidClassDiagram", () => {
 			assert.ok(result.includes("class SimpleClass"));
 		});
 
+		it("should omit display label when label matches node key", () => {
+			const model: ClassModel = {
+				nodes: {
+					User: {
+						label: "User",
+					},
+					Product: {
+						label: "Product",
+						attributes: ["name", "price"],
+					},
+				},
+			};
+			const result = convertToMermaidClassDiagram(model);
+
+			assert.ok(result.includes("class User"));
+			assert.ok(!result.includes('class User["User"]'));
+			assert.ok(result.includes("class Product {"));
+			assert.ok(!result.includes('class Product["Product"] {'));
+		});
+
 		it("should escape special characters in node names", () => {
 			const model: ClassModel = {
 				nodes: {
@@ -505,8 +525,8 @@ describe("convertToMermaidClassDiagram", () => {
 			assert.ok(result.includes("classDiagram"));
 			assert.ok(result.includes("direction TB"));
 			assert.ok(result.includes("---\ntitle: Complete Example\n---"));
-			assert.ok(result.includes('class Library["Library"]'));
-			assert.ok(result.includes('class Book["Book"] {'));
+			assert.ok(result.includes("class Library"));
+			assert.ok(result.includes("class Book {"));
 			assert.ok(result.includes("isbn"));
 			assert.ok(result.includes("title"));
 			assert.ok(result.includes('Library *-- "0..*" Book'));
@@ -569,10 +589,10 @@ describe("convertToMermaidClassDiagram", () => {
 			assert.ok(result.includes("namespace Transactions {"));
 
 			// Grouped nodes
-			assert.ok(result.includes('    class Library["Library"]'));
-			assert.ok(result.includes('    class Book["Book"] {'));
-			assert.ok(result.includes('    class User["User"]'));
-			assert.ok(result.includes('    class Loan["Loan"] {'));
+			assert.ok(result.includes("    class Library"));
+			assert.ok(result.includes("    class Book {"));
+			assert.ok(result.includes("    class User"));
+			assert.ok(result.includes("    class Loan {"));
 
 			// Ungrouped node
 			assert.ok(result.includes('class System["Management System"]'));

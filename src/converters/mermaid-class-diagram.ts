@@ -61,9 +61,10 @@ function formatMultiplicity(multiplicity?: string): {
  */
 function generateNodeLines(nodeName: string, node: ClassModelNode | null): string[] {
 	const className = nodeName.replace(/[()]/g, "_");
-	const classDeclaration = node?.label
-		? `    class ${className}["${node.label.replace(/\n|\\n/g, "<br>")}"]`
-		: `    class ${className}`;
+	const classDeclaration =
+		node?.label && node.label !== nodeName
+			? `    class ${className}["${node.label.replace(/\n|\\n/g, "<br>")}"]`
+			: `    class ${className}`;
 
 	if (node?.attributes && node.attributes.length > 0) {
 		const lines = [`${classDeclaration} {`];
