@@ -1,7 +1,16 @@
 /**
- * @description Exports for CLI modules.
+ * Internal API exports for CLI modules.
+ *
+ * This module serves as the single connection point between CLI modules
+ * and library modules, maintaining loose coupling in the architecture.
+ *
+ * All CLI modules must import from library modules only through this file.
  */
 
-export { outputTargets } from "../core/output-targets.ts";
-export { convertModel, parseFileContent, validateModel } from "../core/pipeline.ts";
-export type { InputFileFormat, ModelType, OutputTargetType } from "../core/types.ts";
+export { isValidValue } from "../core/type-guards.ts";
+export type { MermaidClassDiagramOptions } from "../models/class-model/exporters/mermaid.ts";
+export type {
+	ClassModelExporterKeys,
+	ClassModelImporterKeys,
+} from "../models/class-model/index.ts";
+export { classModelExporters, classModelImporters } from "../models/class-model/index.ts";

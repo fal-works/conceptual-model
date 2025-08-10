@@ -1,16 +1,9 @@
 import assert from "node:assert";
 import { describe, it } from "node:test";
-import type { ClassModel } from "../models/class-model/index.ts";
-import {
-	classModelJsonToMermaid,
-	classModelToMermaid,
-	classModelYamlToMermaid,
-	parseAndValidateClassModelJson,
-	parseAndValidateClassModelYaml,
-} from "./class-model.ts";
+import { type ClassModel, classModelExporters, classModelImporters } from "./class-model.ts";
 
 describe("class-model", () => {
-	describe("yamlToMermaid", () => {
+	describe("importers and exporters", () => {
 		it("should convert valid YAML to Mermaid diagram", () => {
 			const yaml = `
 nodes:
@@ -26,195 +19,156 @@ edges:
     target: Book
     relation: is-composed-of
 `;
-			const result = classModelYamlToMermaid(yaml);
+			const model = classModelImporters.yaml(yaml);
+			const result = classModelExporters.mermaid(model);
 
-			assert.ok(result.includes("classDiagram"));
-			assert.ok(result.includes("class Book"));
-			assert.ok(result.includes("class Library"));
-			assert.ok(result.includes("Library *-- Book"));
+			assert.match(result, /classDiagram/);
+			assert.match(result, /class Book/);
+			assert.match(result, /class Library/);
+			assert.match(result, /Library \*-- Book/);
 		});
 
-		it("should throw error for invalid YAML", () => {
-			const invalidYaml = `invalid: [yaml: structure`;
+		it("should handle auto-class-labels option", () => {
+			const yaml = `
+nodes:
+  UserAccount:
+    attributes:
+      - username
+`;
+			const model = classModelImporters.yaml(yaml);
+			const result = classModelExporters.mermaid(model, { autoClassLabels: true });
 
-			assert.throws(() => classModelYamlToMermaid(invalidYaml), /Error/);
+			assert.match(result, /UserAccount\["user account"\]/);
 		});
 
-		it("should throw error for invalid schema", () => {
-			const invalidData = `edges: "not an array"`;
-
-			assert.throws(() => classModelYamlToMermaid(invalidData), /Validation failed/);
-		});
-	});
-
-	describe("jsonToMermaid", () => {
 		it("should convert valid JSON to Mermaid diagram", () => {
 			const json = JSON.stringify({
 				nodes: {
-					Book: {
-						label: "Book",
-						attributes: ["title", "isbn"],
+					Person: {
+						label: "Person",
+						attributes: ["name", "age"],
 					},
-					Library: {
-						label: "Library",
+					Company: {
+						label: "Company",
 					},
 				},
 				edges: [
 					{
-						source: "Library",
-						target: "Book",
-						relation: "is-composed-of",
+						source: "Person",
+						target: "Company",
+						relation: "refers-to",
+						label: "works for",
 					},
 				],
 			});
 
-			const result = classModelJsonToMermaid(json);
+			const model = classModelImporters.json(json);
+			const result = classModelExporters.mermaid(model);
 
-			assert.ok(result.includes("classDiagram"));
-			assert.ok(result.includes("class Book"));
-			assert.ok(result.includes("class Library"));
-			assert.ok(result.includes("Library *-- Book"));
+			assert.match(result, /classDiagram/);
+			assert.match(result, /class Person/);
+			assert.match(result, /class Company/);
+			assert.match(result, /Person --> Company : works for/);
 		});
 
-		it("should throw error for invalid JSON", () => {
-			const invalidJson = `{"invalid": json structure}`;
-
-			assert.throws(() => classModelJsonToMermaid(invalidJson), /Error/);
+		it("should handle validation errors gracefully", () => {
+			const invalidYaml = `
+nodes: "should be an object"
+`;
+			assert.throws(() => classModelImporters.yaml(invalidYaml), /validation failed/i);
 		});
 
-		it("should throw error for invalid schema", () => {
-			const invalidData = JSON.stringify({ edges: "not an array" });
+		it("should validate JSON models", () => {
+			const invalidJson = JSON.stringify({
+				nodes: "should be an object",
+			});
 
-			assert.throws(() => classModelJsonToMermaid(invalidData), /Validation failed/);
+			assert.throws(() => classModelImporters.json(invalidJson), /validation failed/i);
 		});
 	});
 
-	describe("parseAndValidateClassModelYaml", () => {
+	describe("YAML importer", () => {
 		it("should parse and validate valid YAML", () => {
 			const yaml = `
 nodes:
-  User:
+  TestClass:
+    label: Test Class
     attributes:
-      - "id: string"
-      - "name: string"
-edges: []
+      - attribute1
 `;
-			const result = parseAndValidateClassModelYaml(yaml);
-			assert.ok(result);
-			assert.strictEqual(result.nodes?.User?.attributes?.length, 2);
+			const model = classModelImporters.yaml(yaml);
+			assert.equal(model.nodes?.TestClass?.label, "Test Class");
+			assert.deepEqual(model.nodes?.TestClass?.attributes, ["attribute1"]);
 		});
 
-		it("should throw error for invalid YAML syntax", () => {
-			const invalidYaml = `{ invalid: yaml syntax`;
-			assert.throws(() => parseAndValidateClassModelYaml(invalidYaml), /Error/);
-		});
-
-		it("should throw error for invalid schema", () => {
-			const invalidData = `nodes: "should be object"`;
-			assert.throws(() => parseAndValidateClassModelYaml(invalidData), /Validation failed/);
+		it("should throw on invalid YAML syntax", () => {
+			const invalidYaml = `
+nodes:
+  - this is: invalid
+  yaml syntax
+`;
+			assert.throws(() => classModelImporters.yaml(invalidYaml));
 		});
 	});
 
-	describe("parseAndValidateClassModelJson", () => {
+	describe("JSON importer", () => {
 		it("should parse and validate valid JSON", () => {
-			const json = JSON.stringify({
-				nodes: {
-					User: {
-						attributes: ["id: string", "name: string"],
-					},
-				},
-				edges: [],
-			});
-			const result = parseAndValidateClassModelJson(json);
-			assert.ok(result);
-			assert.strictEqual(result.nodes?.User?.attributes?.length, 2);
-		});
-
-		it("should throw error for invalid JSON syntax", () => {
-			const invalidJson = `{ invalid: json syntax`;
-			assert.throws(() => parseAndValidateClassModelJson(invalidJson), /Error/);
-		});
-
-		it("should throw error for invalid schema", () => {
-			const invalidData = JSON.stringify({ nodes: "should be object" });
-			assert.throws(() => parseAndValidateClassModelJson(invalidData), /Validation failed/);
-		});
-	});
-
-	describe("classModelToMermaid", () => {
-		it("should convert ClassModel to Mermaid diagram", () => {
 			const model: ClassModel = {
 				nodes: {
-					Book: {
-						label: "Book",
-						attributes: ["title", "isbn"],
+					TestClass: {
+						label: "Test Class",
+						attributes: ["attribute1"],
 					},
-					Library: {
-						label: "Library",
+				},
+			};
+			const json = JSON.stringify(model);
+			const parsed = classModelImporters.json(json);
+			assert.deepEqual(parsed, model);
+		});
+
+		it("should throw on invalid JSON syntax", () => {
+			const invalidJson = "{ invalid json }";
+			assert.throws(() => classModelImporters.json(invalidJson));
+		});
+	});
+
+	describe("Mermaid exporter", () => {
+		it("should generate correct Mermaid syntax for relationships", () => {
+			const model: ClassModel = {
+				nodes: {
+					Parent: {},
+					Child: {},
+				},
+				edges: [
+					{
+						source: "Parent",
+						target: "Child",
+						relation: "is-a",
 					},
+				],
+			};
+
+			const result = classModelExporters.mermaid(model);
+			assert.match(result, /Parent --|> Child/);
+		});
+
+		it("should handle multiplicity", () => {
+			const model: ClassModel = {
+				nodes: {
+					Library: {},
+					Book: {},
 				},
 				edges: [
 					{
 						source: "Library",
 						target: "Book",
-						relation: "is-composed-of",
+						multiplicity: "1->0..*",
 					},
 				],
 			};
 
-			const result = classModelToMermaid(model);
-
-			assert.ok(result.includes("classDiagram"));
-			assert.ok(result.includes("class Book"));
-			assert.ok(result.includes("class Library"));
-			assert.ok(result.includes("Library *-- Book"));
-		});
-
-		it("should handle empty model", () => {
-			const model: ClassModel = {};
-			const result = classModelToMermaid(model);
-			assert.ok(result.includes("classDiagram"));
-		});
-
-		it("should support options parameter", () => {
-			const model: ClassModel = {
-				nodes: {
-					UserAccount: {},
-					JSONError: {},
-				},
-			};
-
-			const result = classModelToMermaid(model, { autoClassLabels: true });
-
-			assert.ok(result.includes('class UserAccount["user account"]'));
-			assert.ok(result.includes('class JSONError["JSON error"]'));
-		});
-
-		it("should support options in yamlToMermaid", () => {
-			const yaml = `
-nodes:
-  UserAccount: {}
-  JSONError: {}
-`;
-
-			const result = classModelYamlToMermaid(yaml, { autoClassLabels: true });
-
-			assert.ok(result.includes('class UserAccount["user account"]'));
-			assert.ok(result.includes('class JSONError["JSON error"]'));
-		});
-
-		it("should support options in jsonToMermaid", () => {
-			const json = JSON.stringify({
-				nodes: {
-					UserAccount: {},
-					JSONError: {},
-				},
-			});
-
-			const result = classModelJsonToMermaid(json, { autoClassLabels: true });
-
-			assert.ok(result.includes('class UserAccount["user account"]'));
-			assert.ok(result.includes('class JSONError["JSON error"]'));
+			const result = classModelExporters.mermaid(model);
+			assert.match(result, /Library "1" -- "0..\*" Book/);
 		});
 	});
 });

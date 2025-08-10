@@ -1,15 +1,17 @@
-import type {
-	ClassModel,
-	ClassModelEdge,
-	ClassModelGroup,
-	ClassModelNode,
-} from "../models/class-model/index.ts";
+import type { ClassModel, ClassModelGroup, ClassModelNode } from "../types.ts";
+import {
+	escapeLabel,
+	formatMultiplicity,
+	generateAutoLabel,
+	getRelationArrow,
+	sanitizeClassName,
+} from "./mermaid-utils.ts";
 
 /**
- * Configuration for Mermaid class diagram generation.
+ * Parameters for Mermaid class diagram generation.
  * All properties are required.
  */
-interface MermaidClassDiagramConfig {
+interface MermaidClassDiagramParams {
 	/**
 	 * Automatically generate class labels if no specific label is specified.
 	 * Converts Pascal/camelCase to space-separated lowercase.
@@ -21,82 +23,22 @@ interface MermaidClassDiagramConfig {
 /**
  * Optional configuration type for public API.
  */
-export type MermaidClassDiagramOptions = Partial<MermaidClassDiagramConfig>;
+export type MermaidClassDiagramOptions = Partial<MermaidClassDiagramParams>;
 
 /**
- * Default configuration for Mermaid class diagram generation.
+ * Default parameters for Mermaid class diagram generation.
  */
-const DEFAULT_CONFIG: MermaidClassDiagramConfig = {
+const DEFAULT_PARAMS: MermaidClassDiagramParams = {
 	autoClassLabels: false,
 };
 
 /**
- * Merges user options with defaults to create complete configuration.
+ * Merges user options with defaults to create complete parameters.
  */
-function createConfig(userOptions?: MermaidClassDiagramOptions): MermaidClassDiagramConfig {
+function resolveParams(userOptions?: MermaidClassDiagramOptions): MermaidClassDiagramParams {
 	return {
-		...DEFAULT_CONFIG,
+		...DEFAULT_PARAMS,
 		...userOptions,
-	};
-}
-
-/**
- * Converts Pascal/camelCase to space-separated lowercase.
- * Preserves all-caps acronyms (e.g., "JSONError" -> "JSON error", "InputFileFormat" -> "input file format").
- */
-function generateAutoLabel(className: string): string {
-	return className
-		.replace(/([a-z])(?=[A-Z])|([A-Z]+)(?=[A-Z][a-z])/g, "$& ")
-		.replace(/\b([A-Z][a-z]+)/g, (m) => m.toLowerCase());
-}
-
-/**
- * Converts a relation type to the corresponding Mermaid arrow syntax.
- */
-function getRelationArrow(relation?: ClassModelEdge["relation"]): string {
-	switch (relation) {
-		case "is-a":
-			return "--|>";
-		case "is-composed-of":
-			return "*--";
-		case "aggregates":
-			return "o--";
-		case "refers-to":
-			return "-->";
-		case "to":
-			return "-->";
-		case "with":
-			return "--";
-		default:
-			return "--";
-	}
-}
-
-/**
- * Parses multiplicity string and formats it for Mermaid diagram source and target sides.
- * Supports both single multiplicity (applies to target) and directional format (source->target).
- */
-function formatMultiplicity(multiplicity?: string): {
-	source: string;
-	target: string;
-} {
-	if (!multiplicity) {
-		return { source: "", target: "" };
-	}
-
-	// Check if it contains "->"
-	const arrowMatch = multiplicity.match(/^(.+?)\s*->\s*(.+)$/);
-	if (arrowMatch) {
-		return {
-			source: arrowMatch[1].trim(),
-			target: arrowMatch[2].trim(),
-		};
-	}
-
-	// Single multiplicity applies to target side
-	return {
-		source: "",
-		target: multiplicity.trim(),
 	};
 }
 
@@ -107,20 +49,20 @@ function formatMultiplicity(multiplicity?: string): {
 function generateNodeLines(
 	nodeName: string,
 	node: ClassModelNode | null | undefined,
-	config: MermaidClassDiagramConfig,
+	params: MermaidClassDiagramParams,
 ): string[] {
-	const className = nodeName.replace(/[()]/g, "_");
+	const className = sanitizeClassName(nodeName);
 
 	let effectiveLabel = node?.label;
 
 	// Use auto-generated label if enabled and no explicit label is provided
-	if (config.autoClassLabels && !node?.label) {
+	if (params.autoClassLabels && !node?.label) {
 		effectiveLabel = generateAutoLabel(nodeName);
 	}
 
 	const classDeclaration =
 		effectiveLabel && effectiveLabel !== nodeName
-			? `    class ${className}["${effectiveLabel.replace(/\n|\\n/g, "<br>")}"]`
+			? `    class ${className}["${escapeLabel(effectiveLabel)}"]`
 			: `    class ${className}`;
 
 	if (node?.attributes && node.attributes.length > 0) {
@@ -136,15 +78,10 @@ function generateNodeLines(
 }
 
 /**
- * Converts a ClassModel to Mermaid class diagram syntax.
- * Supports groups as namespaces, node attributes, relationships, and layout options.
- * Throws an error if a node belongs to multiple groups.
+ * Exports a ClassModel to Mermaid class diagram syntax.
  */
-export function convertToMermaidClassDiagram(
-	model: ClassModel,
-	options?: MermaidClassDiagramOptions,
-): string {
-	const config = createConfig(options);
+export function exportMermaid(model: ClassModel, options?: MermaidClassDiagramOptions): string {
+	const params = resolveParams(options);
 	const lines: string[] = [];
 
 	// Add title as frontmatter if available
@@ -180,7 +117,7 @@ export function convertToMermaidClassDiagram(
 				processedNodes.add(nodeName);
 
 				const node: ClassModelNode | undefined = model.nodes?.[nodeName];
-				const nodeLines = generateNodeLines(nodeName, node, config);
+				const nodeLines = generateNodeLines(nodeName, node, params);
 				lines.push(...nodeLines);
 			}
 
@@ -193,14 +130,14 @@ export function convertToMermaidClassDiagram(
 		if (processedNodes.has(nodeName)) continue;
 
 		const node: ClassModelNode | undefined = model.nodes?.[nodeName];
-		const nodeLines = generateNodeLines(nodeName, node, config);
+		const nodeLines = generateNodeLines(nodeName, node, params);
 		lines.push(...nodeLines);
 	}
 
 	// Generate relationships
 	for (const edge of model.edges ?? []) {
-		const sourceClassName = edge.source.replace(/[()]/g, "_");
-		const targetClassName = edge.target.replace(/[()]/g, "_");
+		const sourceClassName = sanitizeClassName(edge.source);
+		const targetClassName = sanitizeClassName(edge.target);
 		const arrow = getRelationArrow(edge.relation);
 		const multiplicity = formatMultiplicity(edge.multiplicity);
 

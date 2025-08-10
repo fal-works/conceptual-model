@@ -1,29 +1,37 @@
-import type { FromSchema } from "json-schema-to-ts";
+import type { ExporterMapConstraint, ImporterMapConstraint } from "../model-spec.ts";
+import type { MermaidClassDiagramOptions } from "./exporters/mermaid.ts";
+import { exportMermaid } from "./exporters/mermaid.ts";
+import { importJson } from "./importers/json.ts";
+import { importYaml } from "./importers/yaml.ts";
 import { schema } from "./schema-object.ts";
+import type { ClassModel, ClassModelEdge, ClassModelGroup, ClassModelNode } from "./types.ts";
 
 export { schema as classModelSchema };
+export type { ClassModel, ClassModelEdge, ClassModelGroup, ClassModelNode };
 
 /**
- * Represents a conceptual class model.
- *
- * The type is automatically generated from the JSON schema.
+ * Available importer types for class models.
  */
-export type ClassModel = FromSchema<typeof schema>;
+export type ClassModelImporterKeys = "yaml" | "json";
 
 /**
- * TypeScript type for a single group in the model.
- * Represents a group for organizing related nodes.
+ * Available exporter types for class models.
  */
-export type ClassModelGroup = NonNullable<ClassModel["groups"]>[string];
+export type ClassModelExporterKeys = "mermaid";
 
 /**
- * TypeScript type for a single node (class) in the model.
- * Represents a class, entity, or concept with optional attributes.
+ * Importers for converting source formats to ClassModel.
  */
-export type ClassModelNode = NonNullable<ClassModel["nodes"]>[string];
+export const classModelImporters = {
+	yaml: importYaml,
+	json: importJson,
+} as const satisfies ImporterMapConstraint<ClassModelImporterKeys, ClassModel>;
 
 /**
- * TypeScript type for a single edge (relationship) in the model.
- * Represents connections between classes like composition, inheritance, etc.
+ * Exporters for converting ClassModel to target formats.
  */
-export type ClassModelEdge = NonNullable<ClassModel["edges"]>[number];
+export const classModelExporters = {
+	mermaid: exportMermaid,
+} as const satisfies ExporterMapConstraint<ClassModelExporterKeys, ClassModel>;
+
+export type { MermaidClassDiagramOptions };
