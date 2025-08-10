@@ -37,11 +37,12 @@ function main() {
 	if (unusedExportEntries.length === 0) {
 		console.log("✅ No unused exports found.");
 	} else {
-		console.group("⚠️  Found unused exports");
+		console.warn("⚠️  Found unused exports");
+		console.group();
 		exitCode = 1;
 		for (const [filePath, exports] of unusedExportEntries)
 			for (const exp of exports) {
-				console.log(normalizePath(filePath), "-", exp.exportName);
+				console.warn(normalizePath(filePath), "-", exp.exportName);
 			}
 		console.groupEnd();
 		const msg = [
