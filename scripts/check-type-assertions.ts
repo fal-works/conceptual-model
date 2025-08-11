@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 
 /**
- * Detects TypeScript "as" assertions (excluding "as const").
+ * Detects TypeScript `as` assertions (excluding `as const`).
+ * Automatically reads `tsconfig.json` at the current directory to find all source files.
+ *
  * Usage:
- *   node detect-as-assertions.ts file1.ts file2.tsx ...
- *   cat some.ts | node detect-as-assertions.ts
+ *   node scripts/check-type-assertions.ts
  */
 
 import { readFile } from "node:fs/promises";
-import * as path from "node:path";
+import { dirname } from "node:path";
 import ts from "typescript";
 
 type Finding = {
@@ -53,7 +54,7 @@ function getFilesFromTsconfig(tsconfigPath: string): string[] {
 	const configParseResult = ts.parseJsonConfigFileContent(
 		configFile.config,
 		ts.sys,
-		path.dirname(tsconfigPath),
+		dirname(tsconfigPath),
 	);
 
 	if (configParseResult.errors.length) {
