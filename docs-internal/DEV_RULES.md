@@ -32,9 +32,16 @@ See [Development Environment](./DEV_ENVIRONMENT.md) for details.
 	  only allow in a few isolated utility functions.
 	- Minimize runtime type checks. Maximize compile-time type checks.
 	- Default type parameters should only be specified if alternative types are almost never needed.
-- Structures:
-	- Prefer functions over classes, stateless over stateful
-	- Minimize exports per module
+- Module Separation:
+	- If a module contains a function that should not be exported publicly but needs to be tested,
+		place it in a separate module and mark it with a JSDoc `@package` tag.
+		This allows importing for testing without exposing it to other modules.
+	- Organize related modules into a package (subdirectory) for each meaningful group,
+		ensuring that internal modules are only accessible within their package and not from outside.
+- Programming Style:
+	- Prefer functions over classes
+	- Prefer stateless over stateful
+	- Prefer immutability over mutability
 - Comments:
 	- Write concise documentation comments for each type and function
 	- Minimize implementation comments. Let the code speak for itself
