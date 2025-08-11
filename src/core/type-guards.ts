@@ -5,5 +5,5 @@
  * @returns true if value is in validValues, false otherwise
  */
 export function isValidValue<T>(validValues: ReadonlySet<T>, value: unknown): value is T {
-	return validValues.has(value as T);
+	return validValues.has(value as T /* UNAVOIDABLE_AS */);
 }

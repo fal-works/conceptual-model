@@ -22,7 +22,7 @@ function runValidation<T>(validateFn: ValidateFunction, data: unknown): Validati
 	if (valid) {
 		return {
 			valid: true,
-			data: data as T,
+			data: data as T /* UNAVOIDABLE_AS */, // TODO: Remove this cast if possible
 		};
 	}
 
