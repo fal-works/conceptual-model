@@ -5,7 +5,7 @@ import type { AnyBoundary } from "../core/util-types.ts";
  * that take any arguments and return a model of type `TModel`.
  *
  * Use this with `satisfies` to ensure type safety.
- * 
+ *
  * @example
  * type MyObject = { id: number; name: string };
  * const importers = {
@@ -26,7 +26,7 @@ export type ImporterMapConstraint<TImporterType extends string, TModel> = Record
  * returning any particular type.
  *
  * Use this with `satisfies` to ensure type safety.
- * 
+ *
  * @example
  * type MyObject = { id: number; name: string };
  * const exporters = {
