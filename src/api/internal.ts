@@ -8,7 +8,7 @@
  */
 
 export { isValidValue } from "../core/type-guards.ts";
-export type { MermaidClassDiagramOptions } from "../models/class-model/exporters/mermaid.ts";
+export type { MermaidClassDiagramOptions } from "../models/class-model/exporters/mermaid/index.ts";
 export type {
 	ClassModelExporterKeys,
 	ClassModelImporterKeys,

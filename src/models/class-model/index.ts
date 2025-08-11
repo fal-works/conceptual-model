@@ -1,6 +1,6 @@
 import type { ExporterMapConstraint, ImporterMapConstraint } from "../model-spec.ts";
-import type { MermaidClassDiagramOptions } from "./exporters/mermaid.ts";
-import { exportMermaid } from "./exporters/mermaid.ts";
+import type { MermaidClassDiagramOptions } from "./exporters/mermaid/index.ts";
+import { exportMermaid } from "./exporters/mermaid/index.ts";
 import { importJson } from "./importers/json.ts";
 import { importYaml } from "./importers/yaml.ts";
 import { schema } from "./schema-object.ts";

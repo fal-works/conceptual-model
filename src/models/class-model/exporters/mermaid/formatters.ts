@@ -1,8 +1,9 @@
-import type { ClassModelEdge } from "../types.ts";
+import type { ClassModelEdge } from "../../types.ts";
 
 /**
  * Converts Pascal/camelCase to space-separated lowercase.
  * Preserves all-caps acronyms (e.g., "JSONError" -> "JSON error", "InputFileFormat" -> "input file format").
+ * @package
  */
 export function generateAutoLabel(className: string): string {
 	return className
@@ -12,6 +13,7 @@ export function generateAutoLabel(className: string): string {
 
 /**
  * Converts a relation type to the corresponding Mermaid arrow syntax.
+ * @package
  */
 export function getRelationArrow(relation?: ClassModelEdge["relation"]): string {
 	switch (relation) {
@@ -35,6 +37,7 @@ export function getRelationArrow(relation?: ClassModelEdge["relation"]): string 
 /**
  * Parses multiplicity string and formats it for Mermaid diagram source and target sides.
  * Supports both single multiplicity (applies to target) and directional format (source->target).
+ * @package
  */
 export function formatMultiplicity(multiplicity?: string): {
 	source: string;
@@ -62,6 +65,7 @@ export function formatMultiplicity(multiplicity?: string): {
 
 /**
  * Sanitizes class names for Mermaid syntax by replacing invalid characters.
+ * @package
  */
 export function sanitizeClassName(className: string): string {
 	return className.replace(/[()]/g, "_");
@@ -69,6 +73,7 @@ export function sanitizeClassName(className: string): string {
 
 /**
  * Escapes label text for Mermaid display by converting newlines to HTML breaks.
+ * @package
  */
 export function escapeLabel(label: string): string {
 	return label.replace(/\n|\\n/g, "<br>");
