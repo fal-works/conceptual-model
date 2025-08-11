@@ -5,6 +5,15 @@ import type { AnyBoundary } from "../core/util-types.ts";
  * that take any arguments and return a model of type `TModel`.
  *
  * Use this with `satisfies` to ensure type safety.
+ * 
+ * @example
+ * type MyObject = { id: number; name: string };
+ * const importers = {
+ * 	csv: (raw: string, delimiter: string = ",") => {
+ * 		const [id, name] = raw.split(delimiter);
+ * 		return { id: Number(id), name };
+ * 	},
+ * } as const satisfies ImporterMapConstraint<ImportKeys, MyObject>;
  */
 export type ImporterMapConstraint<TImporterType extends string, TModel> = Record<
 	TImporterType,
@@ -17,35 +26,14 @@ export type ImporterMapConstraint<TImporterType extends string, TModel> = Record
  * returning any particular type.
  *
  * Use this with `satisfies` to ensure type safety.
+ * 
+ * @example
+ * type MyObject = { id: number; name: string };
+ * const exporters = {
+ * 	json: (obj: MyObject, space?: number) => JSON.stringify(obj, null, space),
+ * } as const satisfies ExporterMapConstraint<ExportKeys, MyObject>;
  */
 export type ExporterMapConstraint<TExporterType extends string, TModel> = Record<
 	TExporterType,
 	(model: TModel, ...args: AnyBoundary[]) => AnyBoundary
 >;
-
-// ---- EXAMPLES --------------------------------
-
-type Model = { id: number; name: string };
-
-type ImportKeys = "json" | "csv";
-type ExportKeys = "html" | "json";
-
-// define importers and exporters with `as const` and `satisfies`
-const importers = {
-	json: (raw: string) => JSON.parse(raw) as Model,
-	csv: (raw: string, delimiter: string = ",") => {
-		const [id, name] = raw.split(delimiter);
-		return { id: Number(id), name };
-	},
-} as const satisfies ImporterMapConstraint<ImportKeys, Model>;
-const exporters = {
-	html: (model: Model, pretty?: boolean) =>
-		pretty ? `<pre>${model.name}</pre>` : `<span>${model.name}</span>`,
-	json: (model: Model, space?: number) => JSON.stringify(model, null, space),
-} as const satisfies ExporterMapConstraint<ExportKeys, Model>;
-
-const m = importers.json("{ id: 1, name: 'Alice' }");
-const j = exporters.json(m, 2);
-
-void m;
-void j;
