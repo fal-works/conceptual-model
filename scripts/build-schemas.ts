@@ -22,12 +22,13 @@ function removeAllDescriptionFields(maybeObject: unknown): unknown {
 		return [...maybeObject].map(removeAllDescriptionFields);
 	}
 
-	const obj = Object.assign({}, maybeObject) as Partial<Record<string, unknown>>;
+	const obj = Object.assign({}, maybeObject);
+	const accessor: Partial<Record<string, unknown>> = obj;
 	for (const key of Object.keys(obj)) {
 		if (key === "description") {
-			obj[key] = undefined;
+			accessor[key] = undefined;
 		} else {
-			obj[key] = removeAllDescriptionFields(obj[key]);
+			accessor[key] = removeAllDescriptionFields(accessor[key]);
 		}
 	}
 
