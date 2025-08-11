@@ -2,18 +2,13 @@ import { existsSync, statSync } from "node:fs";
 import { extname } from "node:path";
 import { isValidValue } from "../api/internal.ts";
 import type { FileFormatType } from "./file-sys/file-format.ts";
-import { inferFormatFromExtension } from "./file-sys/file-format.ts";
+import { inferFormatFromExtension, VALID_FILE_FORMATS } from "./file-sys/file-format.ts";
 import type {
 	OutputParams,
 	OutputStrategy,
 	RawCommandOptions,
 	UnresolvedModelSpecificOptions,
 } from "./types.ts";
-
-/**
- * Static set of valid file formats for efficient validation.
- */
-const VALID_FILE_FORMATS = new Set<FileFormatType>(["json", "yaml", "mermaid"]);
 
 /**
  * Resolves output strategy from raw command options.

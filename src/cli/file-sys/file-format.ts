@@ -11,6 +11,11 @@ import { isValidValue } from "../../api/internal.ts";
 export type FileFormatType = "json" | "yaml" | "mermaid";
 
 /**
+ * Static set of valid file formats for efficient validation.
+ */
+export const VALID_FILE_FORMATS = new Set<FileFormatType>(["json", "yaml", "mermaid"]);
+
+/**
  * Specification for a single file format.
  */
 interface FileFormatSpec {
@@ -55,9 +60,10 @@ export function getFormatExtension(formatType: FileFormatType): string {
 export function inferFormatFromExtension(extension: string): FileFormatType | undefined {
 	const ext = extension.toLowerCase();
 
-	for (const [formatType, spec] of Object.entries(fileFormatMap)) {
+	for (const formatType of VALID_FILE_FORMATS) {
+		const spec = fileFormatMap[formatType];
 		if (isValidValue(spec.validExtensions, ext)) {
-			return formatType as FileFormatType;
+			return formatType;
 		}
 	}
 
