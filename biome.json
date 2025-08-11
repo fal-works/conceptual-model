@@ -15,7 +15,8 @@
 			},
 			"correctness": {
 				"noUnusedVariables": "error",
-				"noPrivateImports": "error"
+				"noPrivateImports": "error",
+				"useImportExtensions": "error"
 			},
 			"nursery": {
 				"noImportCycles": "warn"
@@ -26,6 +27,11 @@
 		"enabled": true,
 		"indentWidth": 2,
 		"lineWidth": 100
+	},
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true
 	},
 	"overrides": [
 		{
