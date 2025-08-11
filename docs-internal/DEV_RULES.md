@@ -43,6 +43,8 @@ See [Development Environment](./DEV_ENVIRONMENT.md) for details.
 	- Prefer stateless over stateful
 	- Prefer immutability over mutability
 - Comments:
+	- Write concise documentation comments for each module at the top of the file.
+	  However do not list out individual types or functions. Typically 1 line is sufficient
 	- Write concise documentation comments for each type and function
 	- Minimize implementation comments. Let the code speak for itself
 	- Avoid explaining "recent changes"
