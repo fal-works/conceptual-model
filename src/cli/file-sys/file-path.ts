@@ -1,3 +1,6 @@
+/**
+ * File path utilities and glob pattern handling.
+ */
 import { glob } from "node:fs/promises";
 import { basename, dirname, extname, join, normalize } from "node:path";
 import type { FileFormatType, InputPatternResult, OutputParams } from "../types.ts";

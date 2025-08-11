@@ -1,3 +1,7 @@
+/**
+ * Main diagram rendering orchestration for Mermaid class diagrams.
+ */
+
 import type { ClassModel } from "../../types.ts";
 import {
 	renderDiagramHeader,

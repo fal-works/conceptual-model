@@ -1,3 +1,6 @@
+/**
+ * Model command registry and dispatch logic.
+ */
 import { processModelCommand as orchestrateModelCommand } from "../command-orchestrator.ts";
 import type { ModelType, RawCommandOptions } from "../types.ts";
 import { processClassModelCommand } from "./class-model.ts";

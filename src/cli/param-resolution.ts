@@ -1,3 +1,6 @@
+/**
+ * CLI parameter validation and resolution utilities.
+ */
 import { existsSync, statSync } from "node:fs";
 import { extname } from "node:path";
 import { isValidValue } from "../api/internal.ts";

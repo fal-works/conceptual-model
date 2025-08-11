@@ -1,3 +1,6 @@
+/**
+ * File processing and transformation execution.
+ */
 import { mkdirSync } from "node:fs";
 import { readInputFile, writeOutputWithStrategy } from "./file-sys/file-operations.ts";
 import { determineOutputPath } from "./file-sys/file-path.ts";

@@ -1,3 +1,7 @@
+/**
+ * Text formatting utilities for Mermaid class diagram syntax.
+ */
+
 import type { ClassModelEdge } from "../../types.ts";
 
 /**

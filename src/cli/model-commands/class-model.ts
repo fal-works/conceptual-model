@@ -1,3 +1,6 @@
+/**
+ * Class model CLI command processor and validation.
+ */
 import { isValidValue } from "../../api/internal.ts";
 import type { FileFormatType } from "../file-sys/file-format.ts";
 import type {

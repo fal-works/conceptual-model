@@ -1,3 +1,7 @@
+/**
+ * Individual rendering functions for different parts of Mermaid class diagrams.
+ */
+
 import type { ClassModel, ClassModelGroup, ClassModelNode } from "../../types.ts";
 import {
 	escapeLabel,

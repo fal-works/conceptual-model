@@ -1,3 +1,6 @@
+/**
+ * Common command processing orchestration for all model types.
+ */
 import { extname } from "node:path";
 import { inferFormatFromExtension } from "./file-sys/file-format.ts";
 import { expandInputPattern } from "./file-sys/file-path.ts";

@@ -1,3 +1,6 @@
+/**
+ * JSON import functionality for class models.
+ */
 import { parseJson } from "../../../core/parsers.ts";
 import { formatValidationErrors, validateData } from "../../../core/validation.ts";
 import { schema } from "../schema-object.ts";

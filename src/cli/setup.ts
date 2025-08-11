@@ -1,3 +1,6 @@
+/**
+ * CLI application configuration and command setup.
+ */
 import { cac } from "cac";
 import { processModelCommand } from "./model-commands/index.ts";
 

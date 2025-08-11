@@ -1,3 +1,6 @@
+/**
+ * CLI type definitions and interfaces for command processing.
+ */
 import type { FileFormatType } from "./file-sys/file-format.ts";
 
 // Re-export types for convenience

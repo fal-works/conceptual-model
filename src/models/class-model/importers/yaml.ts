@@ -1,3 +1,6 @@
+/**
+ * YAML import functionality for class models.
+ */
 import { parseYaml } from "../../../core/parsers.ts";
 import { formatValidationErrors, validateData } from "../../../core/validation.ts";
 import { schema } from "../schema-object.ts";

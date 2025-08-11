@@ -1,3 +1,6 @@
+/**
+ * Data validation utilities using JSON Schema.
+ */
 import Ajv, { type ErrorObject, type JSONSchemaType, type ValidateFunction } from "ajv";
 
 type ValidationResult<T> =

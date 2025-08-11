@@ -1,4 +1,8 @@
 /**
+ * Parameter handling and configuration for Mermaid class diagram generation.
+ */
+
+/**
  * Parameters for Mermaid class diagram generation.
  * All properties are required.
  * @package

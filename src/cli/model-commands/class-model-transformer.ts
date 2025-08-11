@@ -1,3 +1,6 @@
+/**
+ * Class model content transformation between formats.
+ */
 import type {
 	ClassModelExporterKeys,
 	ClassModelImporterKeys,

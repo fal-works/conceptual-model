@@ -1,3 +1,6 @@
+/**
+ * Type constraints for generic model importer/exporter patterns.
+ */
 import type { AnyBoundary } from "../core/util-types.ts";
 
 /**

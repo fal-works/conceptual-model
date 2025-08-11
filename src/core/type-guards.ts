@@ -1,4 +1,8 @@
 /**
+ * Runtime type validation and guard functions.
+ */
+
+/**
  * Type guard that validates if a value is one of the valid values in a set.
  * @param validValues - Set of valid values
  * @param value - Value to validate

@@ -1,3 +1,6 @@
+/**
+ * Class model implementation with importers and exporters.
+ */
 import type { ExporterMapConstraint, ImporterMapConstraint } from "../model-spec.ts";
 import type { MermaidClassDiagramOptions } from "./exporters/mermaid/index.ts";
 import { exportMermaid } from "./exporters/mermaid/index.ts";

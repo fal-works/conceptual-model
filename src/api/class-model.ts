@@ -1,3 +1,6 @@
+/**
+ * Public API facade for class model functionality.
+ */
 export {
 	type ClassModel,
 	type ClassModelEdge,

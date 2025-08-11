@@ -1,3 +1,6 @@
+/**
+ * Main library entry point for conceptual class modeling toolkit.
+ */
 export {
 	type ClassModel,
 	type ClassModelEdge,

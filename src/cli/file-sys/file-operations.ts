@@ -1,3 +1,6 @@
+/**
+ * File system I/O operations for reading and writing files.
+ */
 import { readFileSync, writeFileSync } from "node:fs";
 import type { OutputStrategy } from "../types.ts";
 

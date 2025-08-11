@@ -1,3 +1,7 @@
+/**
+ * Mermaid class diagram exporter public API.
+ */
+
 import type { ClassModel } from "../../types.ts";
 import { renderDiagram } from "./diagram-renderer.ts";
 import { type MermaidClassDiagramOptions, resolveParams } from "./params.ts";

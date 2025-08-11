@@ -1,3 +1,6 @@
+/**
+ * Content parsing utilities for JSON and YAML formats.
+ */
 import { parse } from "yaml";
 
 /**

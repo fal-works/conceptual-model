@@ -1,4 +1,8 @@
 /**
+ * Utility type definitions.
+ */
+
+/**
  * Alias for `any` used only in type constraints.
  *
  * Purpose:
